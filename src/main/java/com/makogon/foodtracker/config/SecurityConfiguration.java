@@ -33,23 +33,6 @@ public class SecurityConfiguration {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-        //or
-
-        httpSecurity
-                .csrf().disable()
-                .authorizeRequests()
-                    .antMatchers("/**").permitAll()
-                    .anyRequest().authenticated()
-                    .and()
-                .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and()
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
-
-
-
         return httpSecurity.build();
     }
 }
