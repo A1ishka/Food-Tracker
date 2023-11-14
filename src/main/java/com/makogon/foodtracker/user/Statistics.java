@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -21,4 +23,6 @@ public class Statistics {
     private float protein;
     private float fats;
     private float carbs;
+    @OneToMany(mappedBy = "statistics")
+    private List<ProductWeight> productWeights;
 }

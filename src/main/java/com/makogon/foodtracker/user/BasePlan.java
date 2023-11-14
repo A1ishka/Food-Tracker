@@ -19,4 +19,7 @@ public class BasePlan {
     private float protein;
     private float fats;
     private float carbs;
+    @ManyToOne
+    @JoinColumn(name = "plan_id")
+    private Plan plan;
 }

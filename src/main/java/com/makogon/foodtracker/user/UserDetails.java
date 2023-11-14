@@ -15,10 +15,14 @@ public class UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userDetailsID;
-    private long personID;
+    @OneToOne
+    @MapsId
+    private Person person;
     private float height;
     private float weight;
     private int age;
-    private long activityID;
+    @ManyToOne
+    @JoinColumn(name = "activity_id")
+    private Activity activity;
     private String sex;
 }

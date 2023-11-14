@@ -16,7 +16,11 @@ public class ProductWeight {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long productWeightID;
     private String addTime;
-    private long productID;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
     private float weight;
-    private long statisticsID;
+    @ManyToOne
+    @JoinColumn(name = "statistics_id")
+    private Statistics statistics;
 }

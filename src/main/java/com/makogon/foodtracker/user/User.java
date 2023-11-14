@@ -11,7 +11,6 @@ import java.util.Collection;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name="user")
@@ -21,8 +20,14 @@ public class User implements UserDetails {
     private long userID;
     private String login;
     private String password;
-    private Long personID;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "person_id")
+    private Person person;
+
+    public User() {
+        this.person = new Person();
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;

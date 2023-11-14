@@ -20,5 +20,7 @@ public class Product {
     private float protein;
     private float fats;
     private float carbs;
-    private long categoryID;
+    @OneToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 }
