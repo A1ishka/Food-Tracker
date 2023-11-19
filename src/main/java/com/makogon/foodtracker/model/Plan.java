@@ -1,4 +1,4 @@
-package com.makogon.foodtracker.user;
+package com.makogon.foodtracker.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

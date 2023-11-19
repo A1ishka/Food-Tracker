@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Калькулятор калорий - Шаг 2</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .calculator {
+      max-width: 300px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 10px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+    }
+
+    .form-group input {
+      width: 90%;
+      padding: 7px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .form-group select{
+      width: 100%;
+      padding: 7px;
+    }
+    .form-group button {
+      width: 100%;
+      margin-top: 10px;
+    }
+    button {
+      padding: 10px;
+      background-color: #428bca;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #3071a9;
+    }
+    .result {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#form-step1').submit(function(event) {
+        event.preventDefault();
+
+        var formData = $(this).serialize();
+
+        $.ajax({
+          type: 'POST',
+          url: '/register/personal',
+          data: formData,
+          success: function(response) {
+            $('#result').html(response);
+            $('#result').show();
+          },
+          error: function() {
+            alert('Произошла ошибка при отправке формы.');
+          }
+        });
+      });
+      $('#backButton').click(function() {
+        window.history.go(-1); // Возврат на предыдущую страницу
+      });
+    });
+  </script>
+</head>
+<body>
+<h1>Калькулятор калорий - Шаг 2</h1>
+<div class="calculator">
+  <form id="form-step2">
+    <table>
+      <tr>
+        <td>
+          <div class="form-group">
+            <label for="weight">Вес (кг):</label>
+            <input type="number" id="weight" required>
+          </div>
+        </td>
+        <td>
+          <div class="form-group">
+            <label for="height">Рост (см):</label>
+            <input type="number" id="height" required>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <div class="form-group">
+      <label for="activity-level">Уровень активности:</label>
+      <select id="activity-level" required>
+        <option value="sedentary">Сидячий образ жизни</option>
+        <option value="lightly-active">Низкая активность</option>
+        <option value="moderately-active">Умеренная активность</option>
+        <option value="very-active">Высокая активность</option>
+        <option value="extra-active">Очень высокая активность</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <button type="submit" onclick="calculate()">Расчитать</button>
+      <button id="backButton" onclick="history.back()">Назад</button>
+
+    </div>
+  </form>
+
+  <div id="result" class="result" style="display: none;"></div>
+
+  <div class="form-group" id="correction" style="display: none;">
+    <button onclick="makeCorrection()">Внести коррекцию</button>
+  </div>
+</div>
+
+<script>
+  function calculate() {
+    var weight = document.getElementById("weight").value;
+    var height = document.getElementById("height").value;
+    var activityLevel = document.getElementById("activity-level").value;
+
+    // var firstName = sessionStorage.getItem("firstName");
+    // var lastName = sessionStorage.getItem("lastName");
+    // var age = sessionStorage.getItem("age");
+    // var sex = sessionStorage.getItem("sex");
+
+    var urlParams = new URLSearchParams(window.location.search);
+    var firstName = urlParams.get("firstName");
+    var lastName = urlParams.get("lastName");
+    var age = urlParams.get("age");
+    var sex = urlParams.get("sex");
+
+    var basalMetabolicRate = calculateBasalMetabolicRate(weight, height, age, sex);
+    var totalCalories = calculateTotalCalories(basalMetabolicRate, activityLevel);
+
+    var resultElement = document.getElementById("result");
+    resultElement.innerHTML = "<h3>Результаты расчета:</h3>" +
+            "<p>Имя: " + firstName + "</p>" +
+            "<p>Фамилия: " + lastName + "</p>" +
+            "<p>Возраст: " + age + "</p>" +
+            "<p>Пол: " + sex + "</p>" +
+            "<p>Ваш базовый метаболический показатель: " + basalMetabolicRate + " калорий/сутки</p>" +
+            "<p>Ваша общая потребность в калориях: " + totalCalories + " калорий/сутки</p>";
+
+            resultElement.style.display = "block";
+
+            var correctionElement = document.getElementById("correction");
+            correctionElement.style.display = "block";
+        }
+
+        function makeCorrection() {
+            window.location.href = "personal.html";
+        }
+
+        function calculateBasalMetabolicRate(weight, height, age, sex) {
+            var bmr = 0;
+            if (sex === "male") {
+                bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+            } else if (sex === "female") {
+                bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+            }
+
+            return bmr;
+        }
+
+        function calculateTotalCalories(basalMetabolicRate, activityLevel) {
+            var totalCalories = 0;
+            if (activityLevel === "sedentary") {
+                totalCalories = basalMetabolicRate * 1.2;
+            } else if (activityLevel === "lightly-active") {
+                totalCalories = basalMetabolicRate * 1.375;
+            } else if (activityLevel === "moderately-active") {
+                totalCalories = basalMetabolicRate * 1.55;
+            } else if (activityLevel === "very-active") {
+                totalCalories = basalMetabolicRate * 1.725;
+            } else if (activityLevel === "extra-active") {
+                totalCalories = basalMetabolicRate * 1.9;
+            }
+            return totalCalories;
+        }
+    </script>
+</body>
+</html>

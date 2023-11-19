@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Распределение БЖУ</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function updateNutrition() {
+            var selectedPlan = $('input[name="plan"]:checked').val();
+            var calories = parseFloat(getParameterByName('calories'));
+
+            var protein = 0;
+            var fat = 0;
+            var carbs = 0;
+
+            if (selectedPlan === 'weightGain') {
+                protein = (calories * 0.3) / 4;
+                fat = (calories * 0.3) / 9;
+                carbs = (calories * 0.4) / 4;
+            } else if (selectedPlan === 'weightLoss') {
+                protein = (calories * 0.4) / 4;
+                fat = (calories * 0.3) / 9;
+                carbs = (calories * 0.3) / 4;
+            } else if (selectedPlan === 'weightMaintenance') {
+                protein = (calories * 0.25) / 4;
+                fat = (calories * 0.3) / 9;
+                carbs = (calories * 0.45) / 4;
+            }
+
+            $('#protein').val(protein.toFixed(2));
+            $('#fat').val(fat.toFixed(2));
+            $('#carbs').val(carbs.toFixed(2));
+
+            var proteinPercentage = (protein / calories * 100).toFixed(2);
+            var fatPercentage = (fat / calories * 100).toFixed(2);
+            var carbsPercentage = (carbs / calories * 100).toFixed(2);
+
+            $('#calories').text(calories.toFixed(2));
+            $('#proteinPercentage').text(proteinPercentage + '%');
+            $('#fatPercentage').text(fatPercentage + '%');
+            $('#carbsPercentage').text(carbsPercentage + '%');
+        }
+
+        function getParameterByName(name) {
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var url = window.location.href;
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
+            var results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+
+        $(document).ready(function() {
+            updateNutrition();
+
+            $('input[name="plan"]').change(function() {
+                updateNutrition();
+            });
+        });
+
+        function getParameterByName(name) {
+            var url = window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
+            var results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+
+        $(document).ready(function() {
+            updateNutrition();
+        });
+    </script>
+</head>
+<body>
+<h1>Распределение БЖУ</h1>
+<form>
+    <div>
+        <label>
+            <input type="radio" name="plan" value="weightGain" checked> План по набору веса
+        </label>
+    </div>
+    <div>
+        <label>
+            <input type="radio" name="plan" value="weightLoss"> План для безопасного похудения
+        </label>
+    </div>
+    <div>
+        <label>
+            <input type="radio" name="plan" value="weightMaintenance"> План для удержания веса
+        </label>
+    </div>
+    <br>
+    <div>
+        <label for="protein">Белки (г):</label>
+        <input type="number" id="protein" step="0.01">
+    </div>
+    <div>
+        <label for="fat">Жиры (г):</label>
+        <input type="number" id="fat" step="0.01">
+    </div>
+    <div>
+        <label for="carbs">Углеводы (г):</label>
+        <input type="number" id="carbs" step="0.01">
+    </div>
+    <br>
+    <div>
+        <label>Калораж (ккал):</label>
+        <span id="calories"></span>
+    </div>
+    <div>
+        <label>Белки (%):</label>
+        <span id="proteinPercentage"></span>
+    </div>
+    <div>
+        <label>Жиры (%):</label>
+        <span id="fatPercentage"></span>
+    </div>
+    <div>
+        <label>Углеводы (%):</label>
+        <span id="carbsPercentage"></span>
+    </div>
+</form>
+</body>
+</html>

@@ -1,4 +1,4 @@
-package com.makogon.foodtracker.auth;
+package com.makogon.foodtracker.register;
 
 
 import lombok.AllArgsConstructor;

@@ -25,12 +25,22 @@ public class SecurityConfiguration {
         httpSecurity
                 .csrf().disable()
                 .authorizeHttpRequests()
-                    .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
-                    .anyRequest().authenticated()
-                    .and()
+                .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/auth/register")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/about")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/register/**")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/register/***")).permitAll()
+//                .requestMatchers(new AntPathRequestMatcher("/register/****")).permitAll()
+//                .requestMatchers(new AntPathRequestMatcher("/register/*****")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/register/personal")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/register/calculation")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/checkLogin")).permitAll()
+
+                .anyRequest().authenticated()
+                .and()
                 .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 

@@ -1,28 +1,25 @@
-package com.makogon.foodtracker.user;
-
+package com.makogon.foodtracker.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "statistics")
-public class Statistics {
+@Table(name = "base_plan")
+public class BasePlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long statisticsID;
-    private String date;
+    private long basePlanID;
     private int kalories;
     private float protein;
     private float fats;
     private float carbs;
-    @OneToMany(mappedBy = "statistics")
-    private List<ProductWeight> productWeights;
+    @ManyToOne
+    @JoinColumn(name = "plan_id")
+    private Plan plan;
 }
