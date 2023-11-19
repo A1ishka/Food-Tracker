@@ -30,8 +30,6 @@ public class SecurityConfiguration {
                 .requestMatchers(new AntPathRequestMatcher("/about")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/register/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/register/***")).permitAll()
-//                .requestMatchers(new AntPathRequestMatcher("/register/****")).permitAll()
-//                .requestMatchers(new AntPathRequestMatcher("/register/*****")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/register/personal")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/register/calculation")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/checkLogin")).permitAll()

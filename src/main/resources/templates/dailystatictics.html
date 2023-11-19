@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Страница формирования статистики</title>
+    <style>
+        .progress {
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            height: 20px;
+            width: 100%;
+        }
+
+        .progress-bar {
+            background-color: #007bff;
+            border-radius: 4px;
+            height: 20px;
+            width: 0;
+            transition: width 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+<h1>Статистика потребления КБЖУ</h1>
+
+<h2>Норма КБЖУ:</h2>
+<p>Калории: <span th:text="${basePlan.caloriesNorm}"></span></p>
+<p>Белки: <span th:text="${basePlan.proteinNorm}"></span></p>
+<p>Жиры: <span th:text="${basePlan.fatNorm}"></span></p>
+<p>Углеводы: <span th:text="${basePlan.carbohydratesNorm}"></span></p>
+
+<h2>Потребление КБЖУ:</h2>
+<p>Калории: <span th:text="${consumedCalories}"></span></p>
+<p>Белки: <span th:text="${consumedProtein}"></span></p>
+<p>Жиры: <span th:text="${consumedFat}"></span></p>
+<p>Углеводы: <span th:text="${consumedCarbohydrates}"></span></p>
+
+<h2>Прогресс:</h2>
+<p>Калории:
+<div class="progress">
+    <div class="progress-bar" th:style="'width: ' + ${progressCalories} + '%'"></div>
+</div>
+</p>
+<p>Белки:
+<div class="progress">
+    <div class="progress-bar" th:style="'width: ' + ${progressProtein} + '%'"></div>
+</div>
+</p>
+<p>Жиры:
+<div class="progress">
+    <div class="progress-bar" th:style="'width: ' + ${progressFat} + '%'"></div>
+</div>
+</p>
+<p>Углеводы:
+<div class="progress">
+    <div class="progress-bar" th:style="'width: ' + ${progressCarbohydrates} + '%'"></div>
+</div>
+</p>
+
+</body>
+</html>

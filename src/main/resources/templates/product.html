@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Страница продукта</title>
+</head>
+<body>
+<h1>Информация о продукте: <span th:text="${product.name}"></span></h1>
+
+<p>Категория:
+    <a th:href="@{/category/{id}(id=${product.category.id})}" th:text="${product.category.name}"></a>
+</p>
+<p>Калории: <span th:text="${product.calories}"></span></p>
+<p>Белки: <span th:text="${product.protein}"></span></p>
+<p>Жиры: <span th:text="${product.fat}"></span></p>
+<p>Углеводы: <span th:text="${product.carbohydrates}"></span></p>
+
+</body>
+</html>

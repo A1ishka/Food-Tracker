@@ -1,5 +1,6 @@
 package com.makogon.foodtracker.register;
 
+import com.makogon.foodtracker.repository.PersonRepository;
 import com.makogon.foodtracker.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +13,11 @@ import java.util.Map;
 public class RegistrationController {
     private final UserService userService;
     private final UserRepository userRepository;
-    public RegistrationController(UserService userService, UserRepository userRepository) {
+    private final PersonRepository personRepository;
+    public RegistrationController(UserService userService, UserRepository userRepository, PersonRepository personRepository) {
         this.userService = userService;
         this.userRepository = userRepository;
+        this.personRepository = personRepository;
     }
     @GetMapping("/register")
     public String showLoginPage() {
@@ -103,10 +106,11 @@ public class RegistrationController {
 //        person.setLastName(lastName);
 //
 //        user.setPerson(person);
-//
 //        userRepository.save(user);
-        //userService.registerUser(user);
+//        userService.registerUser(user);
+//        заполнить все поля и связанные сущности
 
+        //обращаться ли к отдельному методу запрос-ответ AuthenticationService или сохранить все здесь
         return "redirect:/login";
     }
 }
