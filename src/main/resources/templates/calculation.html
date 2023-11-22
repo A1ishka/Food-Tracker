@@ -1,164 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Калькулятор калорий - Шаг 2</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-    }
+    <meta charset="UTF-8">
+    <title>Калькулятор калорий - Шаг 2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
 
-    h1 {
-      text-align: center;
-    }
+        h1 {
+            text-align: center;
+        }
 
-    .calculator {
-      max-width: 300px;
-      margin: 0 auto;
-    }
+        .calculator {
+            max-width: 300px;
+            margin: 0 auto;
+        }
 
-    .form-group {
-      margin-bottom: 10px;
-    }
+        .form-group {
+            margin-bottom: 10px;
+        }
 
-    .form-group label {
-      display: block;
-      font-weight: bold;
-    }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+        }
 
-    .form-group input {
-      width: 90%;
-      padding: 7px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    .form-group select{
-      width: 100%;
-      padding: 7px;
-    }
-    .form-group button {
-      width: 100%;
-      margin-top: 10px;
-    }
-    button {
-      padding: 10px;
-      background-color: #428bca;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
+        .form-group input {
+            width: 90%;
+            padding: 7px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
 
-    button:hover {
-      background-color: #3071a9;
-    }
-    .result {
-      margin-top: 20px;
-      border: 1px solid #ccc;
-      padding: 10px;
-    }
-  </style>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    $(document).ready(function() {
-      $('#form-step1').submit(function(event) {
-        event.preventDefault();
+        .form-group select {
+            width: 100%;
+            padding: 7px;
+        }
 
-        var formData = $(this).serialize();
+        .form-group button {
+            width: 100%;
+            margin-top: 10px;
+        }
 
-        $.ajax({
-          type: 'POST',
-          url: '/register/personal',
-          data: formData,
-          success: function(response) {
-            $('#result').html(response);
-            $('#result').show();
-          },
-          error: function() {
-            alert('Произошла ошибка при отправке формы.');
-          }
+        button {
+            padding: 10px;
+            background-color: #428bca;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3071a9;
+        }
+
+        .result {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $('#form-step2').submit(function (event) {
+                event.preventDefault();
+
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/register/calculation',
+                    data: formData,
+                    success: function (response) {
+                        $('#result').html(response);
+                        $('#result').show();
+                    },
+                    error: function () {
+                        alert('Произошла ошибка при отправке формы.');
+                    }
+                });
+                $('#backButton').click(function () {
+                    window.history.go(-1); // Возврат на предыдущую страницу
+                });
+
+
+            });
+            $('#nextButton').click(function () {
+                $('#form-substep').submit();
+            });
+            var login = [[${login}]];
+            var password = [[${password}]];
+            var firstName = [[${firstName}]];
+            var lastName = [[${lastName}]];
+            var age = [[${age}]];
+            var sex = [[${sex}]];
+
+            // устанавливаем значения в скрытые поля формы
+            document.getElementById("login").value = login;
+            document.getElementById("password").value = password;
+            document.getElementById("firstName").value = firstName;
+            document.getElementById("lastName").value = lastName;
+            document.getElementById("age").value = age;
+            document.getElementById("sex").value = sex;
         });
-      });
-      $('#backButton').click(function() {
-        window.history.go(-1); // Возврат на предыдущую страницу
-      });
-    });
-  </script>
-</head>
-<body>
-<h1>Калькулятор калорий - Шаг 2</h1>
-<div class="calculator">
-  <form id="form-step2">
-    <table>
-      <tr>
-        <td>
-          <div class="form-group">
-            <label for="weight">Вес (кг):</label>
-            <input type="number" id="weight" required>
-          </div>
-        </td>
-        <td>
-          <div class="form-group">
-            <label for="height">Рост (см):</label>
-            <input type="number" id="height" required>
-          </div>
-        </td>
-      </tr>
-    </table>
-    <div class="form-group">
-      <label for="activity-level">Уровень активности:</label>
-      <select id="activity-level" required>
-        <option value="sedentary">Сидячий образ жизни</option>
-        <option value="lightly-active">Низкая активность</option>
-        <option value="moderately-active">Умеренная активность</option>
-        <option value="very-active">Высокая активность</option>
-        <option value="extra-active">Очень высокая активность</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <button type="submit" onclick="calculate()">Расчитать</button>
-      <button id="backButton" onclick="history.back()">Назад</button>
 
-    </div>
-  </form>
 
-  <div id="result" class="result" style="display: none;"></div>
+        function calculate() {
+            var weight = document.getElementById("weight").value;
+            var height = document.getElementById("height").value;
+            var activityLevel = document.getElementById("activity-level").value;
+            document.getElementById("activityLevel").value = String(activityLevel);
+            //alert(document.getElementById("activityLevel").value);
+            var age = document.getElementById("age").value;
+            var sex = document.getElementById("sex").value;
 
-  <div class="form-group" id="correction" style="display: none;">
-    <button onclick="makeCorrection()">Внести коррекцию</button>
-  </div>
-</div>
+            function calculateBasalMetabolicRate(weight, height, age, sex) {
+                var bmr = 0;
+                if (weight > 0 && height > 0) {
+                    if (sex === "male") {
+                        bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+                    } else if (sex === "female") {
+                        bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+                    }
+                } else bmr = 0;
+                document.getElementById("basalMetabolicRate").value = bmr.toFixed(2);
+                return bmr.toFixed(2);
+            }
 
-<script>
-  function calculate() {
-    var weight = document.getElementById("weight").value;
-    var height = document.getElementById("height").value;
-    var activityLevel = document.getElementById("activity-level").value;
+            function calculateTotalCalories(basalMetabolicRate, activityLevel) {
+                var totalCalories = 0;
+                if (activityLevel === "sedentary") {
+                    totalCalories = basalMetabolicRate * 1.2;
+                } else if (activityLevel === "lightly-active") {
+                    totalCalories = basalMetabolicRate * 1.375;
+                } else if (activityLevel === "moderately-active") {
+                    totalCalories = basalMetabolicRate * 1.55;
+                } else if (activityLevel === "very-active") {
+                    totalCalories = basalMetabolicRate * 1.725;
+                } else if (activityLevel === "extra-active") {
+                    totalCalories = basalMetabolicRate * 1.9;
+                }
+                document.getElementById("totalCalories").value = totalCalories.toFixed(2);
+                return totalCalories.toFixed(2);
+            }
 
-    // var firstName = sessionStorage.getItem("firstName");
-    // var lastName = sessionStorage.getItem("lastName");
-    // var age = sessionStorage.getItem("age");
-    // var sex = sessionStorage.getItem("sex");
+            var basalMetabolicRate = calculateBasalMetabolicRate(weight, height, age, sex);
+            var totalCalories = calculateTotalCalories(basalMetabolicRate, activityLevel);
 
-    var urlParams = new URLSearchParams(window.location.search);
-    var firstName = urlParams.get("firstName");
-    var lastName = urlParams.get("lastName");
-    var age = urlParams.get("age");
-    var sex = urlParams.get("sex");
-
-    var basalMetabolicRate = calculateBasalMetabolicRate(weight, height, age, sex);
-    var totalCalories = calculateTotalCalories(basalMetabolicRate, activityLevel);
-
-    var resultElement = document.getElementById("result");
-    resultElement.innerHTML = "<h3>Результаты расчета:</h3>" +
-            "<p>Имя: " + firstName + "</p>" +
-            "<p>Фамилия: " + lastName + "</p>" +
-            "<p>Возраст: " + age + "</p>" +
-            "<p>Пол: " + sex + "</p>" +
-            "<p>Ваш базовый метаболический показатель: " + basalMetabolicRate + " калорий/сутки</p>" +
-            "<p>Ваша общая потребность в калориях: " + totalCalories + " калорий/сутки</p>";
+            var resultElement = document.getElementById("result");
+            resultElement.innerHTML = "<h3>Результаты расчета:</h3>" +
+                "<p>Возраст: " + age + "</p>" +
+                "<p>Пол: " + sex + "</p>" +
+                "<p>Ваш базовый метаболический показатель: " + basalMetabolicRate + " калорий/сутки</p>" +
+                "<p>Ваша общая потребность в калориях: " + totalCalories + " калорий/сутки</p>";
 
             resultElement.style.display = "block";
 
@@ -167,35 +166,70 @@
         }
 
         function makeCorrection() {
-            window.location.href = "personal.html";
+            calculate();
+            //window.location.href = "calculation.html";
         }
 
-        function calculateBasalMetabolicRate(weight, height, age, sex) {
-            var bmr = 0;
-            if (sex === "male") {
-                bmr = 10 * weight + 6.25 * height - 5 * age + 5;
-            } else if (sex === "female") {
-                bmr = 10 * weight + 6.25 * height - 5 * age - 161;
-            }
 
-            return bmr;
-        }
-
-        function calculateTotalCalories(basalMetabolicRate, activityLevel) {
-            var totalCalories = 0;
-            if (activityLevel === "sedentary") {
-                totalCalories = basalMetabolicRate * 1.2;
-            } else if (activityLevel === "lightly-active") {
-                totalCalories = basalMetabolicRate * 1.375;
-            } else if (activityLevel === "moderately-active") {
-                totalCalories = basalMetabolicRate * 1.55;
-            } else if (activityLevel === "very-active") {
-                totalCalories = basalMetabolicRate * 1.725;
-            } else if (activityLevel === "extra-active") {
-                totalCalories = basalMetabolicRate * 1.9;
-            }
-            return totalCalories;
-        }
     </script>
+</head>
+<body>
+<h1>Калькулятор калорий - Шаг 2</h1>
+<div class="calculator">
+    <form id="form-substep" method="post" action="/register/calculation">
+        <form id="form-step2">
+            <table>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label for="weight">Вес (кг):</label>
+                            <input type="number" id="weight" name="weight" required>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label for="height">Рост (см):</label>
+                            <input type="number" id="height" name="height" required>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <div class="form-group">
+                <label for="activity-level">Уровень активности:</label>
+                <select id="activity-level" required>
+                    <option value="sedentary">Сидячий образ жизни</option>
+                    <option value="lightly-active">Низкая активность</option>
+                    <option value="moderately-active">Умеренная активность</option>
+                    <option value="very-active">Высокая активность</option>
+                    <option value="extra-active">Очень высокая активность</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit" onclick="calculate(); return false;">Расчитать</button>
+                <button id="backButton" onclick="history.back()">Назад</button>
+
+            </div>
+        </form>
+
+        <div id="result" class="result" style="display: none"></div>
+
+        <div class="form-group" id="correction" style="display: none">
+            <button onclick="makeCorrection()">Внести коррекцию</button>
+
+            <input type="hidden" id="login" name="login" value="">
+            <input type="hidden" id="password" name="password" value="">
+            <input type="hidden" id="firstName" name="firstName" value="">
+            <input type="hidden" id="lastName" name="lastName" value="">
+            <input type="hidden" id="age" name="age" value="0">
+            <input type="hidden" id="sex" name="sex" value="">
+            <input type="hidden" id="activityLevel" name="activityLevel" value="">
+            <input type="hidden" id="basalMetabolicRate" name="basalMetabolicRate" value="0">
+            <input type="hidden" id="totalCalories" name="totalCalories" value="0">
+
+            <button type="submit" id="nextButton">Далее</button>
+        </div>
+    </form>
+</div>
+</div>
 </body>
 </html>

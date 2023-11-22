@@ -3,6 +3,7 @@ package com.makogon.foodtracker.register;
 import com.makogon.foodtracker.repository.PersonRepository;
 import com.makogon.foodtracker.repository.UserRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -21,6 +22,7 @@ public class RegistrationController {
     }
     @GetMapping("/register")
     public String showLoginPage() {
+        //static public
         return "register";
     }
     @PostMapping("/register")
@@ -44,7 +46,9 @@ public class RegistrationController {
     }
 
     @GetMapping("/register/personal")
-    public String showPersonalPage() {
+    public String showPersonalPage(Model model, @RequestParam("login") String login, @RequestParam("password") String password) {
+        model.addAttribute("login", login);
+        model.addAttribute("password", password);
         return "personal";
     }
 
@@ -59,43 +63,76 @@ public class RegistrationController {
         return "redirect:/register/calculation";
     }
     @GetMapping("/register/calculation")
-    public String showCalculationPage() {
+    public String showCalculationPage(Model model, @RequestParam("login") String login, @RequestParam("password") String password, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("age") int age,@RequestParam("sex") String sex) {
+        model.addAttribute("login", login);
+        model.addAttribute("password", password);
+        model.addAttribute("firstName", firstName);
+        model.addAttribute("lastName", lastName);
+        model.addAttribute("age", age);
+        model.addAttribute("sex", sex);
         return "calculation";
     }
 
     @PostMapping("/register/calculation")
-    public String processCalculationPage(@RequestParam("login") String login, @RequestParam("password") String password, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("age") int age,@RequestParam("sex") String sex, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addAttribute("login", login);
-        redirectAttributes.addAttribute("password", password);
-        redirectAttributes.addAttribute("firstName", firstName);
-        redirectAttributes.addAttribute("lastName", lastName);
-        redirectAttributes.addAttribute("age", age);
-        redirectAttributes.addAttribute("sex", sex);
+    public String processCalculationPage(Model model, @RequestParam(value="login", required = false) String login, @RequestParam(value="password", required = false) String password, @RequestParam(value="firstName", required = false) String firstName, @RequestParam(value="lastName", required = false) String lastName, @RequestParam(value="age", required = false) Integer age, @RequestParam(value="sex", required = false) String sex, @RequestParam(value="weight", required = false) Float weight, @RequestParam(value="height", required = false) Float height, @RequestParam(value = "activityLevel", required = false) String activityLevel, @RequestParam(value="basalMetabolicRate", required = false) Float basalMetabolicRate, @RequestParam(value="totalCalories", required = false) Float totalCalories, RedirectAttributes redirectAttributes) {
+//        redirectAttributes.addAttribute("login", login);
+//        redirectAttributes.addAttribute("password", password);
+//        redirectAttributes.addAttribute("firstName", firstName);
+//        redirectAttributes.addAttribute("lastName", lastName);
+//        redirectAttributes.addAttribute("age", age);
+//        redirectAttributes.addAttribute("sex", sex);
+//        redirectAttributes.addAttribute("weight", weight);
+//        redirectAttributes.addAttribute("height", height);
+//        redirectAttributes.addAttribute("activityLevel", activityLevel);
+//        redirectAttributes.addAttribute("basalMetabolicRate", basalMetabolicRate);
+//        redirectAttributes.addAttribute("totalCalories", totalCalories);
+        model.addAttribute("login", login);
+        model.addAttribute("password", password);
+        model.addAttribute("firstName", firstName);
+        model.addAttribute("lastName", lastName);
+        model.addAttribute("age", age);
+        model.addAttribute("sex", sex);
+        model.addAttribute("weight", weight);
+        model.addAttribute("height", height);
+        model.addAttribute("activityLevel", activityLevel);
+        model.addAttribute("basalMetabolicRate", basalMetabolicRate);
+        model.addAttribute("totalCalories", totalCalories);
         return "redirect:/register/plan";
     }
 
     @GetMapping("/register/plan")
-    public String showPlanPage() {
-        return "calculation";
+    public String showPlanPage(Model model, @RequestParam(value = "login", required = false) String login, @RequestParam(value="password", required = false) String password, @RequestParam(value="firstName", required = false) String firstName, @RequestParam(value="lastName", required = false) String lastName, @RequestParam(value="age", required = false) Integer age,@RequestParam(value="sex", required = false) String sex, @RequestParam(value="weight", required = false) Float weight, @RequestParam(value="height", required = false) Float height, @RequestParam(value="activityLevel", required = false) String activityLevel, @RequestParam(value="basalMetabolicRate", required = false) Float basalMetabolicRate, @RequestParam(value="totalCalories", required = false) Float totalCalories) {
+        model.addAttribute("login", login);
+        model.addAttribute("password", password);
+        model.addAttribute("firstName", firstName);
+        model.addAttribute("lastName", lastName);
+        model.addAttribute("age", age);
+        model.addAttribute("sex", sex);
+        model.addAttribute("weight", weight);
+        model.addAttribute("height", height);
+        model.addAttribute("activityLevel", activityLevel);
+        model.addAttribute("basalMetabolicRate", basalMetabolicRate);
+        model.addAttribute("totalCalories", totalCalories);
+        return "plan";
     }
 
     @PostMapping("/register/plan")
-    public String processPlanPage(@RequestParam("login") String login, @RequestParam("password") String password, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("age") int age,@RequestParam("sex") String sex, RedirectAttributes redirectAttributes) {
+    public String processPlanPage(@RequestParam("login") String login, @RequestParam("password") String password, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("age") int age,@RequestParam("sex") String sex, @RequestParam("activityLevel") String activityLevel, RedirectAttributes redirectAttributes) {
         redirectAttributes.addAttribute("login", login);
         redirectAttributes.addAttribute("password", password);
         redirectAttributes.addAttribute("firstName", firstName);
         redirectAttributes.addAttribute("lastName", lastName);
         redirectAttributes.addAttribute("age", age);
         redirectAttributes.addAttribute("sex", sex);
-        //+активность и калораж
+        redirectAttributes.addAttribute("activityLevel", activityLevel);
         return "redirect:/register/completeReg";
     }
-    @GetMapping("/register/complete")
+    @GetMapping("/register/completeReg")
     public String showCompleteRegPage() {
         return "completeReg";
     }
 
-    @PostMapping("/register/complete")
+    @PostMapping("/register/completeReg+")
     public String processCompleteRegPage(@RequestParam("login") String login, @RequestParam("password") String password, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, RedirectAttributes redirectAttributes) {
 //        User user = new User();
 //        user.setLogin(login);

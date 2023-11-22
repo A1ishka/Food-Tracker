@@ -2,125 +2,198 @@
 <html>
 <head>
     <title>Распределение БЖУ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        / / margin-left: 35 %;
+
+        }
+
+        table {
+            margin-left: 25%;
+        }
+
+        td{
+            padding-left: 50px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            padding: 7px;
+        }
+
+        .form-group input [type="number"] {
+            width: 50%;
+            padding: 7px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+        }
+    </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
+
+</head>
+<body>
+<h1>Распределение БЖУ</h1>
+<form>
+    <table>
+        <tr>
+            <td>
+                <div class="form-group">
+                    <div>
+                        <label>
+                            <input type="radio" name="plan" value="weightGain" checked> План по набору веса
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            <input type="radio" name="plan" value="weightLoss"> План для безопасного похудения
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            <input type="radio" name="plan" value="weightMaintenance"> План для удержания веса
+                        </label>
+                    </div>
+                </div>
+            </td>
+
+            <td>
+                <div class="form-group">
+                    <div>
+                        <label for="protein">Белки (г):</label>
+                        <input type="number" id="protein" step="0.01" value=0>
+                    </div>
+                    <div>
+                        <label for="fat">Жиры (г):</label>
+                        <input type="number" id="fat" step="0.01" value=0>
+                    </div>
+                    <div>
+                        <label for="carbs">Углеводы (г):</label>
+                        <input type="number" id="carbs" step="0.01" value=0>
+                    </div>
+                    <div>
+                        <label>Калораж (ккал):</label>
+                        <span id="calories"></span>
+                    </div>
+                </div>
+            </td>
+
+            <td>
+                <div class="form-group">
+                    <div>
+                        <label>Белки (%):</label>
+                        <span id="proteinPercentage" value=""></span>
+                    </div>
+                    <div>
+                        <label>Жиры (%):</label>
+                        <span id="fatPercentage" value=""></span>
+                    </div>
+                    <div>
+                        <label>Углеводы (%):</label>
+                        <span id="carbsPercentage" value=""></span>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <input type="hidden" id="login" name="login" value="">
+    <input type="hidden" id="password" name="password" value="">
+    <input type="hidden" id="firstName" name="firstName" value="">
+    <input type="hidden" id="lastName" name="lastName" value="">
+    <input type="hidden" id="age" name="age" value=0>
+    <input type="hidden" id="sex" name="sex" value="">
+    <input type="hidden" id="basalMetabolicRate" name="basalMetabolicRate" value=0>
+    <input type="hidden" id="totalCalories" name="totalCalories" value=0>
+</form>
+<script th:inline="javascript">
+
+    var login = [[${login}]];
+    var password = [[${password}]];
+    var firstName = [[${firstName}]];
+    var lastName = [[${lastName}]];
+    var age = [[${age}]];
+    var sex = [[${sex}]];
+    var activityLevel = [[${activityLevel}]];
+    var basalMetabolicRate = [[${basalMetabolicRate}]];
+    var totalCalories = [[${totalCalories}]];
+
+    // устанавливаем значения в скрытые поля формы
+    document.getElementById("login").value = login;
+    document.getElementById("password").value = password;
+    document.getElementById("firstName").value = firstName;
+    document.getElementById("lastName").value = lastName;
+    document.getElementById("age").value = age;
+    document.getElementById("sex").value = sex;
+    document.getElementById("activityLevel").value = activityLevel;
+    document.getElementById("basalMetabolicRate").value = basalMetabolicRate;
+    document.getElementById("totalCalories").value = totalCalories;
+
+
+    document.addEventListener('DOMContentLoaded', function() {
         function updateNutrition() {
             var selectedPlan = $('input[name="plan"]:checked').val();
-            var calories = parseFloat(getParameterByName('calories'));
+            var calories = totalCalories;
 
             var protein = 0;
             var fat = 0;
             var carbs = 0;
 
-            if (selectedPlan === 'weightGain') {
-                protein = (calories * 0.3) / 4;
-                fat = (calories * 0.3) / 9;
-                carbs = (calories * 0.4) / 4;
-            } else if (selectedPlan === 'weightLoss') {
-                protein = (calories * 0.4) / 4;
-                fat = (calories * 0.3) / 9;
-                carbs = (calories * 0.3) / 4;
-            } else if (selectedPlan === 'weightMaintenance') {
-                protein = (calories * 0.25) / 4;
-                fat = (calories * 0.3) / 9;
-                carbs = (calories * 0.45) / 4;
-            }
 
+            if (selectedPlan === 'weightGain') {
+                protein = calories * 0.3;
+                fat = calories * 0.3;
+                carbs = calories * 0.4;
+            } else if (selectedPlan === 'weightLoss') {
+                protein = calories * 0.2;
+                fat = calories * 0.3;
+                carbs = calories * 0.5;
+            } else if (selectedPlan === 'weightMaintenance') {
+                protein = calories * 0.25;
+                fat = calories * 0.3;
+                carbs = calories * 0.45;
+            }
             $('#protein').val(protein.toFixed(2));
             $('#fat').val(fat.toFixed(2));
             $('#carbs').val(carbs.toFixed(2));
+            $('#calories').text(calories.toFixed(2));
 
             var proteinPercentage = (protein / calories * 100).toFixed(2);
             var fatPercentage = (fat / calories * 100).toFixed(2);
             var carbsPercentage = (carbs / calories * 100).toFixed(2);
 
-            $('#calories').text(calories.toFixed(2));
             $('#proteinPercentage').text(proteinPercentage + '%');
             $('#fatPercentage').text(fatPercentage + '%');
             $('#carbsPercentage').text(carbsPercentage + '%');
+
+            // // Получите ссылки на элементы input
+            // const proteinInput = document.getElementById('protein');
+            // const fatInput = document.getElementById('fat');
+            // const carbsInput = document.getElementById('carbs');
+            //
+            // // Обновите значения элементов input
+            // proteinInput.value = protein.toFixed(2);
+            // fatInput.value = fat.toFixed(2);
+            // carbsInput.value = carbs.toFixed(2);
         }
+    })
 
-        function getParameterByName(name) {
-            name = name.replace(/[\[\]]/g, "\\$&");
-            var url = window.location.href;
-            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
-            var results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, " "));
-        }
+    updateNutrition();
 
-        $(document).ready(function() {
-            updateNutrition();
+    $('input[name="plan"]').change(function () {
+        updateNutrition();
+    });
 
-            $('input[name="plan"]').change(function() {
-                updateNutrition();
-            });
-        });
-
-        function getParameterByName(name) {
-            var url = window.location.href;
-            name = name.replace(/[\[\]]/g, "\\$&");
-            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
-            var results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, " "));
-        }
-
-        $(document).ready(function() {
-            updateNutrition();
-        });
-    </script>
-</head>
-<body>
-<h1>Распределение БЖУ</h1>
-<form>
-    <div>
-        <label>
-            <input type="radio" name="plan" value="weightGain" checked> План по набору веса
-        </label>
-    </div>
-    <div>
-        <label>
-            <input type="radio" name="plan" value="weightLoss"> План для безопасного похудения
-        </label>
-    </div>
-    <div>
-        <label>
-            <input type="radio" name="plan" value="weightMaintenance"> План для удержания веса
-        </label>
-    </div>
-    <br>
-    <div>
-        <label for="protein">Белки (г):</label>
-        <input type="number" id="protein" step="0.01">
-    </div>
-    <div>
-        <label for="fat">Жиры (г):</label>
-        <input type="number" id="fat" step="0.01">
-    </div>
-    <div>
-        <label for="carbs">Углеводы (г):</label>
-        <input type="number" id="carbs" step="0.01">
-    </div>
-    <br>
-    <div>
-        <label>Калораж (ккал):</label>
-        <span id="calories"></span>
-    </div>
-    <div>
-        <label>Белки (%):</label>
-        <span id="proteinPercentage"></span>
-    </div>
-    <div>
-        <label>Жиры (%):</label>
-        <span id="fatPercentage"></span>
-    </div>
-    <div>
-        <label>Углеводы (%):</label>
-        <span id="carbsPercentage"></span>
-    </div>
-</form>
+</script>
 </body>
 </html>
