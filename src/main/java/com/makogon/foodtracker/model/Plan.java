@@ -16,5 +16,7 @@ public class Plan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long planID;
     private String planName;
-    private float planKoeff;
+    private int proteinPercentage;
+    private int fatPercentage;
+    private int carbsPercentage;
 }

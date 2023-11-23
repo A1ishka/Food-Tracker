@@ -15,7 +15,7 @@ public class BasePlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long basePlanID;
-    private int kalories;
+    private float kalories;
     private float protein;
     private float fats;
     private float carbs;
