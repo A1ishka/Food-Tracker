@@ -19,7 +19,7 @@ public class Statistics {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long statisticsID;
     private String date;
-    private int kalories;
+    private float calories;
     private float protein;
     private float fats;
     private float carbs;

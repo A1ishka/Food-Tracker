@@ -19,6 +19,9 @@
             width: 0;
             transition: width 0.3s ease-in-out;
         }
+        .progress-bar.colorful {
+            background-color: #28a745;
+        }
     </style>
 </head>
 <body>
@@ -39,17 +42,17 @@
 <h2>Прогресс:</h2>
 <p>Калории:
 <div class="progress">
-    <div class="progress-bar" th:style="'width: ' + ${progressCalories} + '%'"></div>
+    <div class="progress-bar" th:style="'width: ' + ${progressCalories} + '%'" th:class="${progressProtein > 100 ? 'progress-bar colorful' : 'progress-bar'}"></div>
 </div>
 </p>
 <p>Белки:
 <div class="progress">
-    <div class="progress-bar" th:style="'width: ' + ${progressProtein} + '%'"></div>
+    <div class="progress-bar" th:style="'width: ' + ${progressProtein} + '%'" th:class="${progressFat > 100 ? 'progress-bar colorful' : 'progress-bar'}"></div>
 </div>
 </p>
 <p>Жиры:
 <div class="progress">
-    <div class="progress-bar" th:style="'width: ' + ${progressFat} + '%'"></div>
+    <div class="progress-bar" th:style="'width: ' + ${progressFat} + '%'" th:class="${progressCarbohydrates > 100 ? 'progress-bar colorful' : 'progress-bar'}"></div>
 </div>
 </p>
 <p>Углеводы:

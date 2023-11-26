@@ -22,7 +22,7 @@ public class UserDetails {
     private float weight;
     private int age;
     @ManyToOne
-    @JoinColumn(name = "activity_id")
+    @JoinColumn(name = "activityid")
     private Activity activity;
     private String sex;
 }

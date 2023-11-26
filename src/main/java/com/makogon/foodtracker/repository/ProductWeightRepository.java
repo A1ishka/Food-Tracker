@@ -1,5 +1,6 @@
 package com.makogon.foodtracker.repository;
 
+import com.makogon.foodtracker.model.ProductWeight;
 import com.makogon.foodtracker.model.Statistics;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -7,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface StatisticsRepository extends JpaRepository<Statistics, Long> {
-    void delete(Optional<Statistics> statistics);
+public interface ProductWeightRepository extends JpaRepository<ProductWeight, Long> {
+    void delete(Optional<ProductWeight> productWeight);
 }

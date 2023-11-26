@@ -284,6 +284,13 @@
         document.querySelector(".form-2").classList.remove("disable-form");
     }
     function next4() {
+
+        document.querySelector(".form-3").classList.remove("disable-form");
+        document.querySelector(".form-3").classList.add("visible-form");
+        document.querySelector(".form-2").classList.remove("disable-form");
+        document.querySelector(".form-2").classList.add("visible-form");
+        document.querySelector(".form-1").classList.remove("disable-form");
+        document.querySelector(".form-1").classList.add("visible-form");
         var login = document.getElementById('login').value;
         var password = document.getElementById('password').value;
         var firstName = document.getElementById('firstName').value;
@@ -320,7 +327,6 @@
         form.action = url;
         form.method = 'POST';
 
-// Создание объекта FormData и добавление параметров
         var formData = new FormData();
         formData.append('login', login);
         formData.append('password', password);
@@ -336,12 +342,12 @@
         formData.append('fats', fat);
         formData.append('carbs', carbs);
 
-// Добавление параметров в тело запроса
         var params = new URLSearchParams(formData.entries());
         form.body = params;
 
         document.body.appendChild(form);
-        form.submit();
+        document.body.appendChild(form).submit();   //не отправляет форму
+        form.submit();                             //вызывает ошибку
     }
     function prev4() {
         document.querySelector(".form-4").classList.add("disable-form");

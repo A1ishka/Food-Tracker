@@ -1,6 +1,7 @@
-package com.makogon.foodtracker.register;
+package com.makogon.foodtracker.controller;
 
 import com.makogon.foodtracker.model.*;
+import com.makogon.foodtracker.service.UserService;
 import com.makogon.foodtracker.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +35,6 @@ public class RegistrationController {
 
     @GetMapping("/register")
     public String showLoginPage() {
-        //static public
         return "registration";
     }
 
@@ -57,7 +57,7 @@ public class RegistrationController {
                                RedirectAttributes redirectAttributes) {
         if (!userService.isLoginUnique(login)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Логин уже занят");
-            return "redirect:/register";
+            return "redirect:/registration";
         }
 
         Plan planName = planRepository.findByplanName(plan).orElse(null);
@@ -70,7 +70,7 @@ public class RegistrationController {
         basePlan.setFats(fats);
         basePlan.setCarbs(carbs);
         basePlan.setProtein(protein);
-        basePlan.setKalories(calories);
+        basePlan.setCalories(calories);
         basePlan.setPlan(planName);
 
         person.setFirstName(firstName);
@@ -95,7 +95,12 @@ public class RegistrationController {
         personRepository.save(person);
         userRepository.save(user);
 
-        return "completedRegister";
+        return "redirect:/completed";
+    }
+
+    @GetMapping("/completed")
+    public String showRegRes() {
+        return "completedRegistration";
     }
 //    @PostMapping("/register")
 //    public String processLoginPage(@PathVariable(value = "login") String login, RedirectAttributes redirectAttributes) {

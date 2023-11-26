@@ -16,11 +16,11 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long productID;
     private String productName;
-    private int kalories;
+    private float calories;
     private float protein;
     private float fats;
     private float carbs;
     @OneToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "categoryid")
     private Category category;
 }

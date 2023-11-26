@@ -1,4 +1,4 @@
-package com.makogon.foodtracker.products;
+package com.makogon.foodtracker.service;
 
 import com.makogon.foodtracker.model.Category;
 import com.makogon.foodtracker.model.Product;
@@ -29,5 +29,16 @@ public class ProductService {
         return productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + id));
     }
+    public Product updateProduct(Product updatedProduct) {
+        Product existingProduct = getProductById(updatedProduct.getProductID());
 
+//        float fats = 0.1F;
+//        existingProduct.setFats(updatedProduct.setFats(fats));
+
+        return productRepository.save(existingProduct);
+    }
+    public void deleteProductById(long productId) {
+        Product product = getProductById(productId);
+        productRepository.delete(product);
+    }
 }

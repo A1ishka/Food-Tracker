@@ -17,10 +17,10 @@ public class ProductWeight {
     private long productWeightID;
     private String addTime;
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "productid")
     private Product product;
     private float weight;
     @ManyToOne
-    @JoinColumn(name = "statistics_id")
+    @JoinColumn(name = "statisticsid")
     private Statistics statistics;
 }

@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -23,9 +25,11 @@ public class Person {
     @OneToOne(mappedBy = "person")
     private User user;
     @OneToOne
-    @JoinColumn(name = "base_plan_id")
+    @JoinColumn(name = "base_planid")
     private BasePlan basePlan;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_details_id")
+    @JoinColumn(name = "user_detailsid")
     private UserDetails userDetails;
+    @OneToMany(mappedBy = "person")
+    private List<Statistics> statisticsList;
 }

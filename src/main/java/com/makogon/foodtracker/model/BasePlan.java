@@ -14,12 +14,12 @@ import lombok.NoArgsConstructor;
 public class BasePlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long basePlanID;
-    private float kalories;
+    private long base_planid;
+    private float calories;
     private float protein;
     private float fats;
     private float carbs;
     @ManyToOne
-    @JoinColumn(name = "plan_id")
+    @JoinColumn(name = "planid")
     private Plan plan;
 }

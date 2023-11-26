@@ -1,4 +1,4 @@
-package com.makogon.foodtracker.register;
+package com.makogon.foodtracker.service;
 
 import com.makogon.foodtracker.model.User;
 import com.makogon.foodtracker.repository.UserRepository;
@@ -19,5 +19,4 @@ public class UserService {
         return user.isEmpty();
     }
 
-    // Остальные методы сервиса...
 }
