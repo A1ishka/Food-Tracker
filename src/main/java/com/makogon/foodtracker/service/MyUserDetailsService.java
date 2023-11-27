@@ -5,11 +5,11 @@ import com.makogon.foodtracker.repository.UserDetailsRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserDetailsService {
+public class MyUserDetailsService {
 
     private final UserDetailsRepository userDetailsRepository;
 
-    public UserDetailsService(UserDetailsRepository userDetailsRepository) {
+    public MyUserDetailsService(UserDetailsRepository userDetailsRepository) {
         this.userDetailsRepository = userDetailsRepository;
     }
 
@@ -23,7 +23,7 @@ public class UserDetailsService {
     }
 
     public UserDetails updateUserDetails(UserDetails updatedUserDetails) {
-        UserDetails existingUserDetails = getUserDetailsById(updatedUserDetails.getUserDetailsID());
+        UserDetails existingUserDetails = getUserDetailsById(updatedUserDetails.getUser_detailsid());
 
         existingUserDetails.setPerson(updatedUserDetails.getPerson());
         existingUserDetails.setHeight(updatedUserDetails.getHeight());

@@ -19,7 +19,7 @@ public class BasePlan {
     private float protein;
     private float fats;
     private float carbs;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "planid")
     private Plan plan;
 }

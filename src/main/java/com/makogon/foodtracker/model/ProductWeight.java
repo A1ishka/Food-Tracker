@@ -16,11 +16,11 @@ public class ProductWeight {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long productWeightID;
     private String addTime;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "productid")
     private Product product;
     private float weight;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "statisticsid")
     private Statistics statistics;
 }

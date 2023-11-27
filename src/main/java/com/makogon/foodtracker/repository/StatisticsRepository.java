@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface StatisticsRepository extends JpaRepository<Statistics, Long> {
-    void delete(Optional<Statistics> statistics);
+    void delete(Statistics statistics);
 }

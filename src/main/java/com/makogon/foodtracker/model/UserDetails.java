@@ -10,18 +10,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user_details")
+@Table(name = "userdetails")
 public class UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userDetailsID;
-    @OneToOne
+    private long user_detailsid;
+    @OneToOne(cascade = CascadeType.ALL)
     @MapsId
     private Person person;
     private float height;
     private float weight;
     private int age;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "activityid")
     private Activity activity;
     private String sex;

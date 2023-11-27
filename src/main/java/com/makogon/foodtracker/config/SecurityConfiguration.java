@@ -32,6 +32,8 @@ public class SecurityConfiguration {
                 .requestMatchers(new AntPathRequestMatcher("/completed")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/products")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/categories")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/categories/**")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/category/**")).permitAll()
 //                .requestMatchers(new AntPathRequestMatcher("/register/calculation/**")).permitAll()
 //                .requestMatchers(new AntPathRequestMatcher("/register/plan")).permitAll()
 //                .requestMatchers(new AntPathRequestMatcher("/register/completeReg")).permitAll()

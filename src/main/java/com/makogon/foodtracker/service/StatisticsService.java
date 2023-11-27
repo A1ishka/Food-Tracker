@@ -34,8 +34,8 @@ public class StatisticsService {
         return statisticsRepository.save(existingStatistics);
     }
 
-    public void deleteStatisticsById(long statisticsId) {
-        Statistics statistics = getStatisticsById(statisticsId);
-        statisticsRepository.delete(statistics);
-    }
+//    public void deleteStatisticsById(long statisticsId) {
+//        Statistics statistics = getStatisticsById(statisticsId);
+//        statisticsRepository.delete(statistics);
+//    }
 }

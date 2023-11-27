@@ -56,8 +56,8 @@ public class ProductController {
             productWeight.setStatistics(statistics);
             productWeight.setWeight(weight);
 
-            statistics.getProductWeights().add(productWeight);
-            statisticsService.saveStatistics(statistics);
+            //statistics.getProductWeights().add(productWeight);
+            //statisticsService.saveStatistics(statistics);
 
             Person person = personService.getPersonById(personId);
             personService.savePerson(person);

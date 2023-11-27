@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface ProductWeightRepository extends JpaRepository<ProductWeight, Long> {
-    void delete(Optional<ProductWeight> productWeight);
+    void delete(ProductWeight productWeight);
 }

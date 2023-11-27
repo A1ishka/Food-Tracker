@@ -20,7 +20,7 @@ public class Product {
     private float protein;
     private float fats;
     private float carbs;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "categoryid")
     private Category category;
 }
