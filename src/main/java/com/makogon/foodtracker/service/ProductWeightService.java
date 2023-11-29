@@ -23,9 +23,9 @@ public class ProductWeightService {
     }
 
     public ProductWeight updateProductWeight(ProductWeight updatedProductWeight) {
-        ProductWeight existingProductWeight = getProductWeightById(updatedProductWeight.getProductWeightID());
+        ProductWeight existingProductWeight = getProductWeightById(updatedProductWeight.getProduct_weightid());
 
-        existingProductWeight.setAddTime(updatedProductWeight.getAddTime());
+        existingProductWeight.setAdd_time(updatedProductWeight.getAdd_time());
         existingProductWeight.setProduct(updatedProductWeight.getProduct());
         existingProductWeight.setWeight(updatedProductWeight.getWeight());
         existingProductWeight.setStatistics(updatedProductWeight.getStatistics());

@@ -1,6 +1,7 @@
 package com.makogon.foodtracker.service;
 
 import com.makogon.foodtracker.model.Person;
+import com.makogon.foodtracker.model.User;
 import com.makogon.foodtracker.repository.PersonRepository;
 import org.springframework.stereotype.Service;
 @Service
@@ -16,7 +17,11 @@ public class PersonService {
         return personRepository.findById(personId)
                 .orElseThrow(() -> new IllegalArgumentException("Персона с идентификатором " + personId + " не найдена"));
     }
+public Person getPersonByUser(User user){
+    return (Person) personRepository.findByUser(user)
+            .orElseThrow(() -> new IllegalArgumentException("Персона с идентификатором " + user + " не найдена"));
 
+}
     public Person savePerson(Person person) {
         return personRepository.save(person);
     }

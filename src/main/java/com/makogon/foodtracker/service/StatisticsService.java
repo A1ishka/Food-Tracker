@@ -1,8 +1,12 @@
 package com.makogon.foodtracker.service;
+import com.makogon.foodtracker.model.Person;
 import com.makogon.foodtracker.model.Statistics;
 import com.makogon.foodtracker.repository.StatisticsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Service
@@ -10,6 +14,7 @@ public class StatisticsService {
 
     private final StatisticsRepository statisticsRepository;
 
+    @Autowired
     public StatisticsService(StatisticsRepository statisticsRepository) {
         this.statisticsRepository = statisticsRepository;
     }
@@ -18,6 +23,11 @@ public class StatisticsService {
         return statisticsRepository.findById(statisticsId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid category ID: " + statisticsId));}
 
+
+//    public getStatisticsByPersonAndDate(Person person, String dateString) {
+//        LocalDate date = LocalDate.parse(dateString, DateTimeFormatter.ISO_DATE);
+//        return statisticsRepository.findByPersonAndDate(person, date);
+//    }
     public Statistics saveStatistics(Statistics statistics) {
         return statisticsRepository.save(statistics);
     }

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Страница продукта</title>
+    <style>
+        .product-info {
+            margin-top: 15%;
+            margin-bottom: 30%;
+            margin-left: 35%;
+            margin-right: 35%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            background-color: #dfbfe8;
+        }
+
+        .product-info h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .product-info p, div {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .product-info a {
+            text-decoration: none;
+        }
+
+        button {
+            width: 50%;
+            padding: 10px;
+            background-color: #440755;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3071a9;
+        }
+
+        .button-group {
+            padding: 3px;
+        }
+
+        .visible-button {
+        }
+
+        .disable-button {
+            display: none;
+        }
+
+        p:first-letter {
+            color: purple;
+        }
+
+        .textcols {
+            white-space: nowrap;
+        }
+
+        .textcols-item {
+            white-space: normal;
+            display: inline-block;
+            width: 28%;
+            vertical-align: top;
+        }
+
+        .textcols .textcols-item:first-child {
+            margin-right: 0.2%;
+            padding-bottom: 5%;
+        }
+    </style>
+</head>
+<body>
+<div class="product-info">
+    <div>
+        <h1>Информация о продукте <span th:text="${product.productName}">:</span></h1>
+        Категория:
+        <a th:href="@{/category/{categoryID}(categoryID=${product.category.categoryID})}"
+           th:text="${product.category.category}">
+        </a>
+    </div>
+    <br>
+    <div>На 100 г продукта приходится</div>
+    <div class="textcols">
+        <div class="textcols-item">
+            <p>Ккалории: <span th:text="${product.calories}"></span></p>
+            <p>Углеводы: <span th:text="${product.carbs}"></span> г</p>
+        </div>
+        <div class="textcols-item">
+            <p>Белки: <span th:text="${product.protein}"></span> г</p>
+            <p>Жиры: <span th:text="${product.fats}"></span> г</p>
+        </div>
+    </div>
+    <div class="button-group visible-button add-btn">
+        <button onclick="addProduct()">Добавить в избранные</button>
+    </div>
+    <div class="button-group disable-button delete-btn">
+        <button onclick="deleteProduct()">Удалить</button>
+    </div>
+    <div class="button-group disable-button edit-btn">
+        <a th:href="@{/editproduct/{productID}(productID=${product.productID})}"><button>Редактировать</button></a>
+    </div>
+    <div class="button-group back-btn">
+        <button onclick="back()">Назад</button>
+    </div>
+</div>
+<script>
+    //когда документ готов, проверить роль
+    //админ
+    //     document.querySelector(".delete-btn").classList.remove("disable-button");
+    //     document.querySelector(".delete-btn").classList.add("visible-button");
+        document.querySelector(".edit-btn").classList.remove("disable-button");
+        document.querySelector(".edit-btn").classList.add("visible-button");
+    //     document.querySelector(".add-btn").classList.add("disable-button");
+    //     document.querySelector(".add-btn").classList.remove("visible-button");
+    //для юзера не меняем
+    function addProduct() {
+
+    }
+    function deleteProduct() {
+
+    }
+    function editProduct(){
+
+    }
+    function back(){
+        history.back();
+    }
+</script>
+</body>
+</html>

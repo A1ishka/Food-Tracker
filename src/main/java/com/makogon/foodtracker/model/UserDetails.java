@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "userdetails")
 public class UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private long user_detailsid;
     @OneToOne(cascade = CascadeType.ALL)
     @MapsId
@@ -25,4 +25,9 @@ public class UserDetails {
     @JoinColumn(name = "activityid")
     private Activity activity;
     private String sex;
+
+    public UserDetails(long user_detailsid){
+        this.user_detailsid =user_detailsid;
+    }
 }
+//не генерится айдишка

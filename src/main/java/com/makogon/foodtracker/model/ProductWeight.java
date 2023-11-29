@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 public class ProductWeight {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long productWeightID;
-    private String addTime;
+    private long product_weightid;
+    private String add_time;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "productid")
     private Product product;
@@ -24,3 +24,11 @@ public class ProductWeight {
     @JoinColumn(name = "statisticsid")
     private Statistics statistics;
 }
+
+/*
+* alter table product_weight
+    add constraint product_weight_product_productid_fk
+        foreign key (productid) references product (productid)
+            on update cascade on delete cascade;
+
+*/

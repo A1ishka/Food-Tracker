@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Страница продуктов</title>
+    <style>
+        .product-cards {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .product-card {
+            width: 180px;
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .product-card h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .product-card p {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .scrolling-text {
+            width: 170px;
+            height: 20px;
+            overflow: hidden;
+            border: 1px solid #ccc;
+        }
+
+        .scrolling-text p {
+            animation: scrollText 14s linear infinite;
+            white-space: nowrap;
+            margin: 0;
+            text-indent: 0%;
+        }
+
+        @keyframes scrollText {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+        .product_img{
+            width: 100px;
+            height: 100px;
+        }
+        .product_img img {
+            max-width: 100%;
+            max-height: 100%;
+            min-width: 50%;
+            min-height: 50%;
+        }
+    </style>
+</head>
+<body>
+<h1>Продукты категории <span th:text="${category.category}"></span>:</h1>
+
+<div class="product-cards">
+    <div th:each="product : ${products}" th:if="${product.category.categoryID == category.categoryID}" class="product-card">
+        <h2 th:text="${product.productName}"></h2>
+        <table>
+            <tr>
+                <td>
+                    <p>Калории:<p th:text="${product.calories}"></p></p>
+                </td>
+                <td>
+                    <div class="product_img"><a th:href="@{/product/{productID}(productID=${product.productID})}"><img th:src="${(product.image_url != null && product.image_url != '') ? product.image_url :'/resources/static/default_product.png' }"></a></div>
+<!--                    не видит дефолтную картинку-->
+                </td>
+            </tr>
+        </table>
+
+        <div class="scrolling-text">
+            <p>Белки: <span th:text="${product.protein}">г</span> Жиры: <span th:text="${product.fats}">г</span> Углеводы: <span th:text="${product.carbs}">г</span> Белки: <span th:text="${product.protein}">г</span> Жиры: <span th:text="${product.fats}">г</span> Углеводы: <span th:text="${product.carbs}">г</span></p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

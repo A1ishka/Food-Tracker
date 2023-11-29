@@ -3,23 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <title>Страница категорий</title>
+    <style>
+        h1{
+            color: #dfbfe8;
+        }
+        .categories {
+            background-color: #440755;
+            color: #fff;
+            padding: 10px;
+            width: 200px;
+        }
+        /*.categories-card{*/
+        /*    width: 125px;*/
+        /*    padding: 10px;*/
+        /*    margin: 30px;*/
+        /*    border-radius: 5px;*/
+        /*    background-color: #dfbfe8;*/
+        /*}*/
+        .product-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .product-card {
+            width: 155px;
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #dfbfe8;
+        }
+
+        .product-card h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .product-card p {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        a {
+            text-decoration: none;
+            text-decoration-color: black;
+        }
+
+        a:hover {
+            border-bottom: 1px dashed blue;
+        }
+    </style>
 </head>
 <body>
-<h1>Категории</h1>
-
-<ul>
-    <li th:each="category : ${categories}">
-        <a th:href="@{/category/{id}(id=${category.id})}" th:text="${category.name}"></a>
-    </li>
-</ul>
-
-<h2>Продукты</h2>
-
-<ul>
-    <li th:each="product : ${products}">
-        <span th:text="${product.name}"></span>
-    </li>
-</ul>
-
+<table>
+    <tr>
+        <td class="categories">
+            <h1>Категории</h1>
+            <div class="categories-card">
+                <ul>
+                    <li th:each="category : ${categories}">
+                        <a th:href="@{/category/{categoryID}(categoryID=${category.categoryID})}"
+                           th:text="${category.category}"></a>
+                    </li>
+                </ul>
+            </div>
+        </td>
+        <td>
+            <h2>Продукты</h2>
+            <div class="product-cards">
+                <div th:each="product : ${products}" class="product-card">
+                    <a th:href="@{/product/{productID}(productID=${product.productID})}">
+                        <h2 th:text="${product.productName}"></h2>
+                        <p><span th:text="${product.calories}"></span> ккал</p>
+                        <p th:text="${product.category.category}"></p>
+                    </a>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
 </body>
 </html>

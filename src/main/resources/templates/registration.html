@@ -321,13 +321,38 @@
         var protein = document.getElementById('protein').value;
         var fat = document.getElementById('fat').value;
         var carbs = document.getElementById('carbs').value;
+        var calories = document.getElementById('calories').value;
+
+        //var url = '/register';
+        var form = document.createElement('form');
+        // form.action = url;
+        // form.method = 'POST';
+        //
+        // var formData = new FormData(form);
+        // formData.append('login', login);
+        // formData.append('password', password);
+        // formData.append('firstName', firstName);
+        // formData.append('lastName', lastName);
+        // formData.append('age', age);
+        // formData.append('sex', sex);
+        // formData.append('weight', weight);
+        // formData.append('height', height);
+        // formData.append('activityLevel', activity);
+        // formData.append('plan', selectedPlan);
+        // formData.append('protein', protein);
+        // formData.append('fats', fat);
+        // formData.append('carbs', carbs);
+        //
+        // // var params = new URLSearchParams(formData.entries());
+        // // form.body = params;
+        // //document.body.appendChild(form).submit();   //не отправляет форму
+        // document.body.appendChild(form);
+        // form.submit();                             //вызывает ошибку
+
+
 
         var url = '/register';
-        var form = document.createElement('form');
-        form.action = url;
-        form.method = 'POST';
-
-        var formData = new FormData();
+        var formData = new FormData(form);
         formData.append('login', login);
         formData.append('password', password);
         formData.append('firstName', firstName);
@@ -337,17 +362,27 @@
         formData.append('weight', weight);
         formData.append('height', height);
         formData.append('activityLevel', activity);
-        formData.append('plan', selectedPlan);
+        formData.append('calories', calories);
         formData.append('protein', protein);
         formData.append('fats', fat);
         formData.append('carbs', carbs);
+        formData.append('plan', selectedPlan);
 
-        var params = new URLSearchParams(formData.entries());
-        form.body = params;
-
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.text())
+            .then(data => {
+                // Обработка успешного ответа от сервера
+                console.log(data);
+            })
+            .catch(error => {
+                // Обработка ошибки
+                console.error('Произошла ошибка:', error);
+            });
         document.body.appendChild(form);
-        document.body.appendChild(form).submit();   //не отправляет форму
-        form.submit();                             //вызывает ошибку
+        form.submit();
     }
     function prev4() {
         document.querySelector(".form-4").classList.add("disable-form");

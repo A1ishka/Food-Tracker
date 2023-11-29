@@ -38,7 +38,6 @@ public class RegistrationController {
         return "registration";
     }
 
-
     @PostMapping("/register")
     public String registerUser(@RequestParam("login") String login,
                                @RequestParam("password") String password,
@@ -64,7 +63,7 @@ public class RegistrationController {
         BasePlan basePlan = new BasePlan();
         Activity activity = activityRepository.findByactivityName(activityLevel).orElse(null);
         Person person = new Person();
-        UserDetails userDetails = new UserDetails();
+        UserDetails userDetails = new UserDetails(11);
         User user = new User();
 
         basePlan.setFats(fats);

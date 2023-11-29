@@ -23,8 +23,6 @@ public class Statistics {
     private float protein;
     private float fats;
     private float carbs;
-//    @OneToMany(mappedBy = "statistics")
-//    private List<ProductWeight> productWeights;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "personid")
     private Person person;
