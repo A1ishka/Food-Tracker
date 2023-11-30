@@ -21,7 +21,7 @@ public class Product {
     private float fats;
     private float carbs;
     private String image_url;
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "categoryid")
     private Category category;
 }

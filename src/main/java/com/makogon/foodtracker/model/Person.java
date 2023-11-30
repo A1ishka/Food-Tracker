@@ -20,14 +20,12 @@ public class Person {
     private long personID;
     private String firstName;
     private String lastName;
-    private String planName;
     @OneToOne(mappedBy = "person")
     private User user;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "base_planid")
     private BasePlan basePlan;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_detailsid")
+    @OneToOne(mappedBy = "person")
     private UserDetails userDetails;
 //    @OneToMany(mappedBy = "person")
 //    private List<Statistics> statisticsList;

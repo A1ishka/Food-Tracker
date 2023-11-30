@@ -34,7 +34,7 @@ public class RegistrationController {
     }
 
     @GetMapping("/register")
-    public String showLoginPage() {
+    public String showRegisterPage() {
         return "registration";
     }
 
@@ -63,7 +63,7 @@ public class RegistrationController {
         BasePlan basePlan = new BasePlan();
         Activity activity = activityRepository.findByactivityName(activityLevel).orElse(null);
         Person person = new Person();
-        UserDetails userDetails = new UserDetails(11);
+        UserDetails userDetails = new UserDetails(/*person.getPersonID()*/);
         User user = new User();
 
         basePlan.setFats(fats);
@@ -72,17 +72,17 @@ public class RegistrationController {
         basePlan.setCalories(calories);
         basePlan.setPlan(planName);
 
+
+
         person.setFirstName(firstName);
         person.setLastName(lastName);
-        person.setPlanName(plan);
         person.setBasePlan(basePlan);
-        person.setUserDetails(userDetails);
 
         userDetails.setHeight(height);
         userDetails.setWeight(weight);
         userDetails.setAge(age);
         userDetails.setActivity(activity);
-        userDetails.setSex(sex);
+        userDetails.setSex(sex.toString());
         userDetails.setPerson(person);
 
         user.setLogin(login);
@@ -138,6 +138,16 @@ public class RegistrationController {
         return response;
     }
 
+    @GetMapping("/login")
+    public String showLoginPage() {
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String loginUser(@RequestParam("login") String login,
+                               @RequestParam("password") String password){
+        return "redirect:/home";
+    }
 
 //    @GetMapping("/register/personal")
 //    public String showPersonalPage(Model model, @RequestParam("login") String login, @RequestParam("password") String password) {

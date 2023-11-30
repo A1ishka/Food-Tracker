@@ -4,15 +4,17 @@
     <meta charset="UTF-8">
     <title>Страница категорий</title>
     <style>
-        h1{
+        h1 {
             color: #dfbfe8;
         }
+
         .categories {
             background-color: #440755;
             color: #fff;
             padding: 10px;
             width: 200px;
         }
+
         /*.categories-card{*/
         /*    width: 125px;*/
         /*    padding: 10px;*/
@@ -53,9 +55,34 @@
         a:hover {
             border-bottom: 1px dashed blue;
         }
+
+        img {
+            width: 3%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
+<header>
+    <div class="header">
+        <table>
+            <tr>
+                <td>
+                    <a th:href="@{/categories}">Продукты</a>
+                </td>
+                <td>
+                    <a th:href="@{/home}">Личный кабинет</a>
+                </td>
+                <td>
+                    <a th:href="@{/categories}">Статистика</a>
+                </td>
+                <td>
+                    <a th:href="@{/categories}"><img src="/static/user_icon.png" alt="user_icon"></a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
 <table>
     <tr>
         <td class="categories">

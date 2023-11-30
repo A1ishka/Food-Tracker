@@ -22,18 +22,18 @@ public class MyUserDetailsService {
         return userDetailsRepository.save(userDetails);
     }
 
-    public UserDetails updateUserDetails(UserDetails updatedUserDetails) {
-        UserDetails existingUserDetails = getUserDetailsById(updatedUserDetails.getUser_detailsid());
-
-        existingUserDetails.setPerson(updatedUserDetails.getPerson());
-        existingUserDetails.setHeight(updatedUserDetails.getHeight());
-        existingUserDetails.setWeight(updatedUserDetails.getWeight());
-        existingUserDetails.setAge(updatedUserDetails.getAge());
-        existingUserDetails.setActivity(updatedUserDetails.getActivity());
-        existingUserDetails.setSex(updatedUserDetails.getSex());
-
-        return userDetailsRepository.save(existingUserDetails);
-    }
+//    public UserDetails updateUserDetails(UserDetails updatedUserDetails) {
+//        UserDetails existingUserDetails = getUserDetailsById(updatedUserDetails.getUser_detailsid());
+//убрала из-за поиска по айди деталей
+//        existingUserDetails.setPerson(updatedUserDetails.getPerson());
+//        existingUserDetails.setHeight(updatedUserDetails.getHeight());
+//        existingUserDetails.setWeight(updatedUserDetails.getWeight());
+//        existingUserDetails.setAge(updatedUserDetails.getAge());
+//        existingUserDetails.setActivity(updatedUserDetails.getActivity());
+//        existingUserDetails.setSex(updatedUserDetails.getSex());
+//
+//        return userDetailsRepository.save(existingUserDetails);
+//    }
 
     public void deleteUserDetailsById(long userDetailsId) {
         UserDetails userDetails = getUserDetailsById(userDetailsId);
