@@ -23,7 +23,7 @@ public class UserService {
 //    }
     public User getUserByLogin(String login) {
         return userRepository.findByLogin(login)
-                .orElseThrow(() -> new IllegalArgumentException("Базовый план с идентификатором " + login + " не найден"));
+                .orElseThrow(() -> new IllegalArgumentException("Пользователь с идентификатором " + login + " не найден"));
     }
 
     public boolean isLoginUnique(String login) {
@@ -31,4 +31,8 @@ public class UserService {
         return user.isEmpty();
     }
 
+    public User getUserByID(Long userID){
+        return userRepository.findByUserID(userID)
+                .orElseThrow(()->new IllegalArgumentException("Пользователь с идентификатором " + userID + " не найден"));
+    }
 }

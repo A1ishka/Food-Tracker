@@ -60,6 +60,34 @@
             width: 3%;
             height: auto;
         }
+        h1 {
+            text-align: center;
+        }
+        .search{
+            margin-left: 41%;
+        }
+        input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 20%;
+            height: 100%;
+        }
+
+        button {
+            width: 10%;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #440755;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3071a9;
+        }
     </style>
 </head>
 <body>
@@ -87,6 +115,10 @@
     <tr>
         <td class="categories">
             <h1>Категории</h1>
+            <div class="search">
+                <input type="text" id="searchCInput" placeholder="Поиск">
+                <button onclick="searchCategory()">Найти</button>
+            </div>
             <div class="categories-card">
                 <ul>
                     <li th:each="category : ${categories}">
@@ -98,6 +130,10 @@
         </td>
         <td>
             <h2>Продукты</h2>
+            <div class="search">
+                <input type="text" id="searchInput" placeholder="Поиск продукта">
+                <button onclick="searchProduct()">Найти</button>
+            </div>
             <div class="product-cards">
                 <div th:each="product : ${products}" class="product-card">
                     <a th:href="@{/product/{productID}(productID=${product.productID})}">
@@ -110,5 +146,21 @@
         </td>
     </tr>
 </table>
+<script>
+    function searchProduct() {
+        var input = document.getElementById("searchInput");
+        var filter = input.value.toLowerCase();
+        var productCards = document.getElementsByClassName("product-card");
+
+        for (var i = 0; i < productCards.length; i++) {
+            var productName = productCards[i].getElementsByTagName("h2")[0].textContent.toLowerCase();
+            if (productName.indexOf(filter) > -1) {
+                productCards[i].style.display = "";
+            } else {
+                productCards[i].style.display = "none";
+            }
+        }
+    }
+</script>
 </body>
 </html>

@@ -1,13 +1,13 @@
 package com.makogon.foodtracker.controller;
 
 import com.makogon.foodtracker.model.*;
-import com.makogon.foodtracker.service.UserService;
 import com.makogon.foodtracker.repository.*;
+import com.makogon.foodtracker.service.MyUserDetailsService;
+import com.makogon.foodtracker.service.PersonService;
+import com.makogon.foodtracker.service.UserService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
@@ -16,15 +16,19 @@ import java.util.Map;
 @Controller
 public class RegistrationController {
     private final UserService userService;
+    private final PersonService personService;
+    private final MyUserDetailsService userDetailsService;
     private final UserRepository userRepository;
-    private final UserDetailsRepository userDetailsRepository;
+    private final MyUserDetailsRepository userDetailsRepository;
     private final PersonRepository personRepository;
     private final PlanRepository planRepository;
     private final ActivityRepository activityRepository;
     private final BasePlanRepository basePlanRepository;
 
-    public RegistrationController(UserService userService, UserRepository userRepository, UserDetailsRepository userDetailsRepository, PersonRepository personRepository, PlanRepository planRepository, ActivityRepository activityRepository, BasePlanRepository basePlanRepository) {
+    public RegistrationController(UserService userService, PersonService personService, MyUserDetailsService userDetailsService, UserRepository userRepository, MyUserDetailsRepository userDetailsRepository, PersonRepository personRepository, PlanRepository planRepository, ActivityRepository activityRepository, BasePlanRepository basePlanRepository) {
         this.userService = userService;
+        this.personService = personService;
+        this.userDetailsService = userDetailsService;
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
         this.personRepository = personRepository;
@@ -54,16 +58,16 @@ public class RegistrationController {
                                @RequestParam("carbs") Float carbs,
                                @RequestParam("plan") String plan,
                                RedirectAttributes redirectAttributes) {
-        if (!userService.isLoginUnique(login)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Логин уже занят");
-            return "redirect:/registration";
-        }
+//        if (!userService.isLoginUnique(login)) {
+//            redirectAttributes.addFlashAttribute("errorMessage", "Логин уже занят");
+//            return "redirect:/registration";
+//        }
 
         Plan planName = planRepository.findByplanName(plan).orElse(null);
         BasePlan basePlan = new BasePlan();
         Activity activity = activityRepository.findByactivityName(activityLevel).orElse(null);
         Person person = new Person();
-        UserDetails userDetails = new UserDetails(/*person.getPersonID()*/);
+        UserDetails userDetails = new UserDetails();
         User user = new User();
 
         basePlan.setFats(fats);
@@ -71,8 +75,6 @@ public class RegistrationController {
         basePlan.setProtein(protein);
         basePlan.setCalories(calories);
         basePlan.setPlan(planName);
-
-
 
         person.setFirstName(firstName);
         person.setLastName(lastName);
@@ -82,7 +84,7 @@ public class RegistrationController {
         userDetails.setWeight(weight);
         userDetails.setAge(age);
         userDetails.setActivity(activity);
-        userDetails.setSex(sex.toString());
+        userDetails.setSex(sex);
         userDetails.setPerson(person);
 
         user.setLogin(login);
@@ -101,32 +103,6 @@ public class RegistrationController {
     public String showRegRes() {
         return "completedRegistration";
     }
-//    @PostMapping("/register")
-//    public String processLoginPage(@PathVariable(value = "login") String login, RedirectAttributes redirectAttributes) {
-//        if (!userService.isLoginUnique(login)) {
-//            redirectAttributes.addFlashAttribute("errorMessage", "Логин уже занят");
-//        }
-//        return "redirect:/register";
-//    }
-//
-//    @GetMapping("/halls/{login}/{password}/{firstName}/{lastName}/{age}/{sex}/{weight}/{height}/{activityLevel}/{calories}/{protein}/{fats}/{carbs}/{plan}")
-//    public String completeRegistry(Model model, @PathVariable(value = "login") String login,
-//                              @PathVariable(value = "password") String password,
-//                              @PathVariable(value = "firstName") String firstName,
-//                              @PathVariable(value = "lastName") String lastName,
-//                              @PathVariable(value = "age") Integer age,
-//                              @PathVariable(value = "sex") String sex,
-//                              @PathVariable(value = "weight") Float weight,
-//                              @PathVariable(value = "height") Float height,
-//                              @PathVariable(value = "activityLevel") String activityLevel,
-//                              @PathVariable(value = "calories") Float calories,
-//                              @PathVariable(value = "protein") Float protein,
-//                              @PathVariable(value = "fats") Float fats,
-//                              @PathVariable(value = "carbs") Float carbs,
-//                              @PathVariable(value = "plan") String plan) {
-//
-//        return "completedRegister";
-//    }
 
 
     @PostMapping("/checkLogin")
@@ -145,8 +121,19 @@ public class RegistrationController {
 
     @PostMapping("/login")
     public String loginUser(@RequestParam("login") String login,
-                               @RequestParam("password") String password){
+                            @RequestParam("password") String password) {
         return "redirect:/home";
+    }
+
+    @GetMapping("/editprofile/{userID}")
+    public String showProfilePage(@PathVariable("userID") Long userID, Model model) {
+        User user = userService.getUserByID(userID);
+        Person person = personService.getPersonByUser(user);
+        UserDetails userDetails = userDetailsService.getUserDetailsByPerson(person);
+        model.addAttribute("user", user);
+        model.addAttribute("person", person);
+        model.addAttribute("userDetails", userDetails);
+        return "editProfile";
     }
 
 //    @GetMapping("/register/personal")

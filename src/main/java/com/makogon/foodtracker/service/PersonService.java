@@ -14,7 +14,7 @@ public class PersonService {
     }
 
     public Person getPersonById(long personId) {
-        return personRepository.findById(personId)
+        return personRepository.findByPersonID(personId)
                 .orElseThrow(() -> new IllegalArgumentException("Персона с идентификатором " + personId + " не найдена"));
     }
 public Person getPersonByUser(User user){

@@ -284,7 +284,6 @@
         document.querySelector(".form-2").classList.remove("disable-form");
     }
     function next4() {
-
         document.querySelector(".form-3").classList.remove("disable-form");
         document.querySelector(".form-3").classList.add("visible-form");
         document.querySelector(".form-2").classList.remove("disable-form");
@@ -348,11 +347,9 @@
         })
             .then(response => response.text())
             .then(data => {
-                // Обработка успешного ответа от сервера
                 console.log(data);
             })
             .catch(error => {
-                // Обработка ошибки
                 console.error('Произошла ошибка:', error);
             });
         document.body.appendChild(form);

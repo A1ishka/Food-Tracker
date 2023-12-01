@@ -29,13 +29,18 @@ public class ProductService {
         return productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + id));
     }
-    public Product updateProduct(Product updatedProduct) {
-        Product existingProduct = getProductById(updatedProduct.getProductID());
+    public void updateProduct(Long productID, Product updatedProduct) {
+        Product existingProduct = getProductById(productID);
+        if (updatedProduct.getCategory() != null) {
+            //existingProduct.setProductName(updatedProduct.getProductName());
+            existingProduct.setCategory(updatedProduct.getCategory());
+            existingProduct.setCalories(updatedProduct.getCalories());
+            existingProduct.setCarbs(updatedProduct.getCarbs());
+            existingProduct.setProtein(updatedProduct.getProtein());
+            existingProduct.setFats(updatedProduct.getFats());
 
-//        float fats = 0.1F;
-//        existingProduct.setFats(updatedProduct.setFats(fats));
-
-        return productRepository.save(existingProduct);
+            productRepository.save(existingProduct);
+        }
     }
     public void deleteProductById(long productId) {
         Product product = getProductById(productId);

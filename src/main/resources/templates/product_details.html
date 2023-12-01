@@ -104,7 +104,9 @@
         <button onclick="deleteProduct()">Удалить</button>
     </div>
     <div class="button-group disable-button edit-btn">
-        <a th:href="@{/editproduct/{productID}(productID=${product.productID})}"><button>Редактировать</button></a>
+        <a th:href="@{/editproduct/{productID}(productID=${product.productID})}">
+            <button>Редактировать</button>
+        </a>
     </div>
     <div class="button-group back-btn">
         <button onclick="back()">Назад</button>
@@ -113,23 +115,34 @@
 <script>
     //когда документ готов, проверить роль
     //админ
-    //     document.querySelector(".delete-btn").classList.remove("disable-button");
-    //     document.querySelector(".delete-btn").classList.add("visible-button");
-        document.querySelector(".edit-btn").classList.remove("disable-button");
-        document.querySelector(".edit-btn").classList.add("visible-button");
+    document.querySelector(".delete-btn").classList.remove("disable-button");
+    document.querySelector(".delete-btn").classList.add("visible-button");
+    document.querySelector(".edit-btn").classList.remove("disable-button");
+    document.querySelector(".edit-btn").classList.add("visible-button");
     //     document.querySelector(".add-btn").classList.add("disable-button");
     //     document.querySelector(".add-btn").classList.remove("visible-button");
     //для юзера не меняем
     function addProduct() {
 
     }
+
     function deleteProduct() {
-
+        var urlObject = new URL(window.location.href);
+        var url = urlObject.pathname;
+        var parts = url.split("/");
+        var productID = parts.pop();
+        $.ajax({
+            url: '/deleteproduct/' + productID,
+            type: 'DELETE',
+            success: function (response) {
+                alert(response)
+            },
+            error: function (error) {
+            }
+        });
     }
-    function editProduct(){
 
-    }
-    function back(){
+    function back() {
         history.back();
     }
 </script>

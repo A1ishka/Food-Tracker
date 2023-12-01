@@ -67,48 +67,76 @@
         input, select {
             width: 60%;
             height: 30px;
-            font-size: larger;
+            font-size: medium;
             font-family: Verdana;
         }
     </style>
 </head>
 <body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function updateProduct() {
+
+        var urlObject = new URL(window.location.href);
+        var url = urlObject.pathname;
+        var parts = url.split("/");
+        var productID = parts.pop();
+        var updatedProduct = {
+            categoryid: document.getElementsByName("category")[0].value,
+            calories: document.getElementsByName("calories")[0].value,
+            fats: document.getElementsByName("fats")[0].value,
+            protein: document.getElementsByName("protein")[0].value,
+            carbs: document.getElementsByName("carbs")[0].value,
+        };
+
+        $.ajax({
+            url: '/editproduct/' + productID,
+            type: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(updatedProduct),
+            success: function(response) {
+
+            },
+            error: function(error) {
+            }
+        });
+    }
+</script>
 <div class="product-info">
-    <div>
-        <h1>Информация о продукте <span th:text="${product.productName}">:</span></h1>
-        Категория:
-        <select name="category">
-            <option th:each="category : ${categories}"
-                    th:value="${category.categoryID}"
-                    th:text="${category.category}"
-                    th:selected="${category.categoryID == product.category.categoryID}"></option>
-        </select>
-    </div>
-    <br>
-    <div>На 100 г продукта приходится</div>
-    <div class="textcols">
-        <div class="textcols-item">
-            <p>Ккалории: <input type="number" min="0" max="1000" name="calories" th:value="${product.calories}"></p>
-            <p>Углеводы: <input type="number" min="0" max="100" step="0.1" name="carbs" th:value="${product.carbs}"></p>
+    <form onsubmit="event.preventDefault(); updateProduct();">
+        <div>
+            <h1>Информация о продукте <span th:text="${product.productName}">:</span></h1>
+            Категория:
+            <select name="category">
+                <option th:each="category : ${categories}"
+                        th:value="${category.categoryID}"
+                        th:text="${category.category}"
+                        th:selected="${category.categoryID == product.category.categoryID}"></option>
+            </select>
         </div>
-        <div class="textcols-item">
-            <p>Белки: <input type="number" min="0" max="100" step="0.1" name="protein" th:value="${product.protein}"></p>
-            <p>Жиры: <input type="number" min="0" max="100" step="0.1" name="fats" th:value="${product.fats}"></p>
+        <br>
+        <div>На 100 г продукта приходится</div>
+        <div class="textcols">
+            <div class="textcols-item">
+                <p>Ккалории: <input type="number" min="0" max="1000" name="calories" th:value="${product.calories}"></p>
+                <p>Углеводы: <input type="number" min="0" max="100" step="0.1" name="carbs" th:value="${product.carbs}">
+                </p>
+            </div>
+            <div class="textcols-item">
+                <p>Белки: <input type="number" min="0" max="100" step="0.1" name="protein"
+                                 th:value="${product.protein}"></p>
+                <p>Жиры: <input type="number" min="0" max="100" step="0.1" name="fats" th:value="${product.fats}"></p>
+            </div>
         </div>
-    </div>
-    <div class="button-group edit-btn">
-        <button onclick="editProduct()">Редактировать</button>
-    </div>
+        <div class="button-group edit-btn">
+            <button type="submit">Редактировать</button>
+        </div>
+    </form>
     <div class="button-group back-btn">
         <button onclick="back()">Назад</button>
     </div>
 </div>
 <script>
-    function editProduct() {
-//запрос на редактирование
-        //роли
-    }
-
     function back() {
         history.back();
     }

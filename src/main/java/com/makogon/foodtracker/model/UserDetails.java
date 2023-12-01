@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long user_detailsid;
+    private long userDetailsid;
     private float height;
     private float weight;
     private int age;

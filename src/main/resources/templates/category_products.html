@@ -26,6 +26,7 @@
             font-size: 14px;
             margin-bottom: 5px;
         }
+
         .scrolling-text {
             width: 170px;
             height: 20px;
@@ -48,40 +49,236 @@
                 transform: translateX(-100%);
             }
         }
-        .product_img{
+
+        .product_img {
             width: 100px;
             height: 100px;
         }
+
         .product_img img {
             max-width: 100%;
             max-height: 100%;
             min-width: 50%;
             min-height: 50%;
         }
+
+        h1 {
+            text-align: center;
+        }
+
+        .search {
+            margin-left: 41%;
+        }
+
+        input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 20%;
+            height: 100%;
+        }
+
+        button {
+            width: 10%;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #440755;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3071a9;
+        }
+
+        .filter input {
+            width: 7%;
+        }
+
+        .filter {
+            margin: 1%;
+            margin-left: 4%;
+        }
+
+        .sortButton, .filterButton {
+            width: 33%;
+        }
     </style>
 </head>
 <body>
 <h1>Продукты категории <span th:text="${category.category}"></span>:</h1>
+<div class="search">
 
+    <input type="text" id="searchInput" placeholder="Поиск продукта по категории">
+    <button onclick="searchProduct()">Найти</button>
+    <br>
+    <button onclick="sortAlphabetically()" class="sortButton">Сортировать по алфавиту</button>
+    <br>
+    <button onclick="sortReverseAlphabetically()" class="sortButton">Сортировать в обратном порядке</button>
+    <br>
+    <br>
+    <div class="filter">
+        <label for="caloriesMinInput">Калории:</label>
+        <input type="number" id="caloriesMinInput" placeholder="Мин">
+
+        <input type="number" id="caloriesMaxInput" placeholder="Макс">
+    </div>
+
+<!--    <div class="filter">-->
+<!--        <label for="proteinMinInput">Белки:</label>-->
+<!--        <input type="number" id="proteinMinInput" placeholder="Мин">-->
+
+<!--        <input type="number" id="proteinMaxInput" placeholder="Макс">-->
+<!--    </div>-->
+
+<!--    <div class="filter">-->
+<!--        <label for="fatMinInput">Жиры:</label>-->
+<!--        <input type="number" id="fatMinInput" placeholder="Мин">-->
+
+<!--        <input type="number" id="fatMaxInput" placeholder="Макс">-->
+<!--    </div>-->
+
+<!--    <div class="filter">-->
+<!--        <label for="carbsMinInput">Углеводы:</label>-->
+<!--        <input type="number" id="carbsMinInput" placeholder="Мин">-->
+
+<!--        <input type="number" id="carbsMaxInput" placeholder="Макс">-->
+<!--    </div>-->
+
+    <button onclick="filterProducts()" class="filterButton">Фильтровать</button>
+    <br>
+    <button onclick="resetFilter()" class="filterButton">Сбросить фильтр</button>
+</div>
 <div class="product-cards">
-    <div th:each="product : ${products}" th:if="${product.category.categoryID == category.categoryID}" class="product-card">
+    <div th:each="product : ${products}" th:if="${product.category.categoryID == category.categoryID}"
+         class="product-card">
         <h2 th:text="${product.productName}"></h2>
         <table>
             <tr>
                 <td>
-                    <p>Калории:<p th:text="${product.calories}"></p></p>
+                    <p>Калории:
+                    <p th:text="${product.calories}" id="calories" th:value="${product.calories}"></p></p>
                 </td>
                 <td>
-                    <div class="product_img"><a th:href="@{/product/{productID}(productID=${product.productID})}"><img th:src="${(product.image_url != null && product.image_url != '') ? product.image_url :'/resources/static/default_product.png' }"></a></div>
-<!--                    не видит дефолтную картинку-->
+                    <div class="product_img"><a th:href="@{/product/{productID}(productID=${product.productID})}"><img
+                            th:src="${(product.image_url != null && product.image_url != '') ? product.image_url :'/resources/static/default_product.png' }"></a>
+                    </div>
+                    <!--                    не видит дефолтную картинку-->
                 </td>
             </tr>
         </table>
 
         <div class="scrolling-text">
-            <p>Белки: <span th:text="${product.protein}">г</span> Жиры: <span th:text="${product.fats}">г</span> Углеводы: <span th:text="${product.carbs}">г</span> Белки: <span th:text="${product.protein}">г</span> Жиры: <span th:text="${product.fats}">г</span> Углеводы: <span th:text="${product.carbs}">г</span></p>
+            <p>Белки: <span th:text="${product.protein}">г</span> Жиры: <span th:text="${product.fats}">г</span>
+                Углеводы: <span th:text="${product.carbs}">г</span> Белки: <span th:text="${product.protein}">г</span>
+                Жиры: <span th:text="${product.fats}">г</span> Углеводы: <span th:text="${product.carbs}">г</span></p>
         </div>
     </div>
 </div>
+<script>
+    function searchProduct() {
+        var input = document.getElementById("searchInput");
+        var filter = input.value.toLowerCase();
+        var productCards = document.getElementsByClassName("product-card");
+
+        for (var i = 0; i < productCards.length; i++) {
+            var productName = productCards[i].getElementsByTagName("h2")[0].textContent.toLowerCase();
+            if (productName.indexOf(filter) > -1) {
+                productCards[i].style.display = "";
+            } else {
+                productCards[i].style.display = "none";
+            }
+        }
+    }
+
+    var allProductCards = document.getElementsByClassName("product-card");
+    var filteredProductCards = Array.from(allProductCards);
+
+    function filterProducts() {
+        var searchInput = document.getElementById("searchInput").value.toLowerCase();
+        var caloriesMinInput = parseFloat(document.getElementById("caloriesMinInput").value) || 0;
+        var caloriesMaxInput = parseFloat(document.getElementById("caloriesMaxInput").value) || 1000;
+        // var proteinMinInput = parseFloat(document.getElementById("proteinMinInput").value) || 0;
+        // var proteinMaxInput = parseFloat(document.getElementById("proteinMaxInput").value) || 1000;
+        // var fatMinInput = parseFloat(document.getElementById("fatMinInput").value) || 0;
+        // var fatMaxInput = parseFloat(document.getElementById("fatMaxInput").value) || 1000;
+        // var carbsMinInput = parseFloat(document.getElementById("carbsMinInput").value) || 0;
+        // var carbsMaxInput = parseFloat(document.getElementById("carbsMaxInput").value) || 1000;
+
+        filteredProductCards = Array.from(allProductCards).filter(function (card) {
+            var productName = card.getElementsByTagName("h2")[0].textContent.toLowerCase();
+            var calories = document.getElementById("calories").value
+            console.log(calories)
+            // var protein = parseFloat(card.dataset.protein);
+            // var fat = parseFloat(card.dataset.fat);
+            // var carbs = parseFloat(card.dataset.carbs);
+
+            return (
+                productName.indexOf(searchInput) > -1 &&
+                calories >= caloriesMinInput && calories <= caloriesMaxInput //&&
+                // protein >= proteinMinInput && protein <= proteinMaxInput &&
+                // fat >= fatMinInput && fat <= fatMaxInput &&
+                // carbs >= carbsMinInput && carbs <= carbsMaxInput
+            );
+        });
+
+        updateProductCardVisibility();
+    }
+
+    function resetFilter() {
+        document.getElementById("searchInput").value = "";
+        document.getElementById("caloriesMinInput").value = "";
+        document.getElementById("caloriesMaxInput").value = "";
+        document.getElementById("proteinMinInput").value = "";
+        document.getElementById("proteinMaxInput").value = "";
+        document.getElementById("fatMinInput").value = "";
+        document.getElementById("fatMaxInput").value = "";
+        document.getElementById("carbsMaxInput").value = "";
+        document.getElementById("carbsMinInput").value = "";
+        filteredProductCards = Array.from(allProductCards);
+        updateProductCardVisibility();
+    }
+
+    function sortAlphabetically() {
+        filteredProductCards.sort(function (a, b) {
+            var productNameA = a.getElementsByTagName("h2")[0].textContent.toLowerCase();
+            var productNameB = b.getElementsByTagName("h2")[0].textContent.toLowerCase();
+            return productNameA.localeCompare(productNameB);
+        });
+
+        updateProductCardOrder();
+    }
+
+    function sortReverseAlphabetically() {
+        filteredProductCards.sort(function (a, b) {
+            var productNameA = a.getElementsByTagName("h2")[0].textContent.toLowerCase();
+            var productNameB = b.getElementsByTagName("h2")[0].textContent.toLowerCase();
+            return productNameB.localeCompare(productNameA);
+        });
+
+        updateProductCardOrder();
+    }
+
+    function updateProductCardVisibility() {
+        for (var i = 0; i < allProductCards.length; i++) {
+            if (filteredProductCards.includes(allProductCards[i])) {
+                allProductCards[i].style.display = "";
+            } else {
+                allProductCards[i].style.display = "none";
+            }
+        }
+    }
+
+    function updateProductCardOrder() {
+        var productCardsContainer = document.querySelector(".product-cards");
+
+        filteredProductCards.forEach(function (card) {
+            productCardsContainer.appendChild(card);
+        });
+    }
+</script>
+</script>
 </body>
 </html>

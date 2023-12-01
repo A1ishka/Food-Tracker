@@ -1,21 +1,26 @@
 package com.makogon.foodtracker.service;
 
+import com.makogon.foodtracker.model.Person;
 import com.makogon.foodtracker.model.UserDetails;
-import com.makogon.foodtracker.repository.UserDetailsRepository;
+import com.makogon.foodtracker.repository.MyUserDetailsRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MyUserDetailsService {
 
-    private final UserDetailsRepository userDetailsRepository;
+    private final MyUserDetailsRepository userDetailsRepository;
 
-    public MyUserDetailsService(UserDetailsRepository userDetailsRepository) {
+    public MyUserDetailsService(MyUserDetailsRepository userDetailsRepository) {
         this.userDetailsRepository = userDetailsRepository;
     }
 
     public UserDetails getUserDetailsById(long userDetailsId) {
-        return userDetailsRepository.findById(userDetailsId)
+        return userDetailsRepository.findByUserDetailsid(userDetailsId)
                 .orElseThrow(() -> new IllegalArgumentException("Информация о пользователе с идентификатором " + userDetailsId + " не найдена"));
+    }
+    public UserDetails getUserDetailsByPerson(Person peson) {
+        return userDetailsRepository.findByPerson(peson)
+                .orElseThrow(() -> new IllegalArgumentException("Информация о пользователе с идентификатором " + peson + " не найдена"));
     }
 
     public UserDetails saveUserDetails(UserDetails userDetails) {

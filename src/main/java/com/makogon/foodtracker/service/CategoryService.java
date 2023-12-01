@@ -22,7 +22,7 @@ public class CategoryService {
     }
 
     public Category getCategoryById(Long id) {
-        return categoryRepository.findById(id)
+        return categoryRepository.findByCategoryID(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid category ID: " + id));
     }
 
