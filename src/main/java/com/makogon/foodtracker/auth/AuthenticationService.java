@@ -22,12 +22,12 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
-                /*.firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .email(request.getEmail())*/
+                //.firstname(request.getFirstname())
+                //.lastname(request.getLastname())
+                //.email(request.getEmail())
+                //.person(new Person())
                 .login(request.getLogin())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .person(new Person())
                 .build();
         /*var savedUser =*/ repository.save(user);
         var jwtToken = jwtService.generateToken(user);

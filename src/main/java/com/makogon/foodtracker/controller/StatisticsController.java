@@ -1,18 +1,13 @@
 package com.makogon.foodtracker.controller;
 
-import com.makogon.foodtracker.model.BasePlan;
-import com.makogon.foodtracker.model.Person;
-import com.makogon.foodtracker.model.Statistics;
-import com.makogon.foodtracker.model.User;
+import com.makogon.foodtracker.model.*;
 import com.makogon.foodtracker.repository.StatisticsRepository;
 import com.makogon.foodtracker.service.PersonService;
 import com.makogon.foodtracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -48,8 +43,21 @@ public class StatisticsController {
                                    @RequestParam("protein") float consumedProtein,
                                    @RequestParam("fats") float consumedFat,
                                    @RequestParam("carbs") float consumedCarbohydrates) {
-
+//как-то работать с датой..............................................
         return "redirect:/statistics";
     }
 
+    @PostMapping("/addtostatistics")
+    public void addToStatistics(@RequestParam("productweight")ProductWeight productweight, @RequestParam("statistics") Statistics statistics, @RequestParam("person") Person person) {
+        //или принимать отдельные параметры вместо продукт вейта, а создавать экземпляр прямо здесь..
+    }
+    @PutMapping("/putpwinstatistics")
+    public void UpdatePWInStatistics(@RequestParam("productweight")ProductWeight productweight, @RequestParam("statistics") Statistics statistics, @RequestParam("person") Person person) {
+
+    }
+
+    @DeleteMapping("/deletepw")
+    public void deletePW(){
+
+    }
 }

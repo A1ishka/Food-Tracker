@@ -13,5 +13,4 @@ import lombok.NoArgsConstructor;
 public class RegisterRequest {
     private String login;
     private String password;
-    //fields can be added
 }

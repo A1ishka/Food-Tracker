@@ -1,10 +1,17 @@
 package com.makogon.foodtracker.controller;
 
+import com.makogon.foodtracker.auth.AuthenticationRequest;
+import com.makogon.foodtracker.auth.AuthenticationResponse;
+import com.makogon.foodtracker.auth.AuthenticationService;
 import com.makogon.foodtracker.model.*;
+import com.makogon.foodtracker.register.RegisterRequest;
 import com.makogon.foodtracker.repository.*;
 import com.makogon.foodtracker.service.MyUserDetailsService;
 import com.makogon.foodtracker.service.PersonService;
 import com.makogon.foodtracker.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +31,9 @@ public class RegistrationController {
     private final PlanRepository planRepository;
     private final ActivityRepository activityRepository;
     private final BasePlanRepository basePlanRepository;
+    private final AuthenticationService authenticationService;
 
-    public RegistrationController(UserService userService, PersonService personService, MyUserDetailsService userDetailsService, UserRepository userRepository, MyUserDetailsRepository userDetailsRepository, PersonRepository personRepository, PlanRepository planRepository, ActivityRepository activityRepository, BasePlanRepository basePlanRepository) {
+    public RegistrationController(UserService userService, PersonService personService, MyUserDetailsService userDetailsService, UserRepository userRepository, MyUserDetailsRepository userDetailsRepository, PersonRepository personRepository, PlanRepository planRepository, ActivityRepository activityRepository, BasePlanRepository basePlanRepository, AuthenticationService authenticationService) {
         this.userService = userService;
         this.personService = personService;
         this.userDetailsService = userDetailsService;
@@ -35,6 +43,7 @@ public class RegistrationController {
         this.planRepository = planRepository;
         this.activityRepository = activityRepository;
         this.basePlanRepository = basePlanRepository;
+        this.authenticationService = authenticationService;
     }
 
     @GetMapping("/register")
@@ -57,7 +66,8 @@ public class RegistrationController {
                                @RequestParam("fats") Float fats,
                                @RequestParam("carbs") Float carbs,
                                @RequestParam("plan") String plan,
-                               RedirectAttributes redirectAttributes) {
+                               RedirectAttributes redirectAttributes,
+                               HttpServletRequest request) {
 //        if (!userService.isLoginUnique(login)) {
 //            redirectAttributes.addFlashAttribute("errorMessage", "Логин уже занят");
 //            return "redirect:/registration";
@@ -94,7 +104,10 @@ public class RegistrationController {
         basePlanRepository.save(basePlan);
         userDetailsRepository.save(userDetails);
         personRepository.save(person);
-        userRepository.save(user);
+        //userRepository.save(user);
+
+        RegisterRequest registerRequest = new RegisterRequest(login, password);
+        authenticationService.register(registerRequest);
 
         return "redirect:/completed";
     }
@@ -121,8 +134,18 @@ public class RegistrationController {
 
     @PostMapping("/login")
     public String loginUser(@RequestParam("login") String login,
-                            @RequestParam("password") String password) {
-        return "redirect:/home";
+                            @RequestParam("password") String password,
+                            HttpServletResponse response) {
+
+        AuthenticationRequest authRequest = new AuthenticationRequest(login, password);
+        authenticationService.authenticate(authRequest);
+        AuthenticationResponse authenticationResponse =  authenticationService.authenticate(authRequest);
+        Cookie cookie = new Cookie("token", authenticationResponse.getAccessToken());
+        //cookie.setMaxAge(86400); // Установка срока действия куки (например, 24 часа)
+        cookie.setPath("/"); // Установка пути, для которого будет доступна кука (например, весь сайт)
+        response.addCookie(cookie);
+
+        return "redirect:/categories";
     }
 
     @GetMapping("/editprofile/{userID}")
@@ -135,162 +158,4 @@ public class RegistrationController {
         model.addAttribute("userDetails", userDetails);
         return "editProfile";
     }
-
-//    @GetMapping("/register/personal")
-//    public String showPersonalPage(Model model, @RequestParam("login") String login, @RequestParam("password") String password) {
-//        model.addAttribute("login", login);
-//        model.addAttribute("password", password);
-//        return "personal";
-//    }
-//
-//    @PostMapping("/register/personal")
-//    public String processPersonalPage(@RequestParam("login") String login, @RequestParam("password") String password, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("age") int age, @RequestParam("sex") String sex, RedirectAttributes redirectAttributes) {
-//        redirectAttributes.addAttribute("login", login);
-//        redirectAttributes.addAttribute("password", password);
-//        redirectAttributes.addAttribute("firstName", firstName);
-//        redirectAttributes.addAttribute("lastName", lastName);
-//        redirectAttributes.addAttribute("age", age);
-//        redirectAttributes.addAttribute("sex", sex);
-//        return "redirect:/register/calculation";
-//    }
-//
-//    @GetMapping("/register/calculation")
-//    public String showCalculationPage(Model model, @RequestParam("login") String login, @RequestParam("password") String password, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("age") int age, @RequestParam("sex") String sex) {
-//        model.addAttribute("login", login);
-//        model.addAttribute("password", password);
-//        model.addAttribute("firstName", firstName);
-//        model.addAttribute("lastName", lastName);
-//        model.addAttribute("age", age);
-//        model.addAttribute("sex", sex);
-//        return "calculation";
-//    }
-//
-//    @PostMapping("/register/calculation")
-//    public String processCalculationPage(Model model, @RequestParam(value = "login", required = false) String login, @RequestParam(value = "password", required = false) String password, @RequestParam(value = "firstName", required = false) String firstName, @RequestParam(value = "lastName", required = false) String lastName, @RequestParam(value = "age", required = false) Integer age, @RequestParam(value = "sex", required = false) String sex, @RequestParam(value = "weight", required = false) Float weight, @RequestParam(value = "height", required = false) Float height, @RequestParam(value = "activityLevel", required = false) String activityLevel, @RequestParam(value = "basalMetabolicRate", required = false) Float basalMetabolicRate, @RequestParam(value = "totalCalories", required = false) Float totalCalories, RedirectAttributes redirectAttributes) {
-////        redirectAttributes.addAttribute("login", login);
-////        redirectAttributes.addAttribute("password", password);
-////        redirectAttributes.addAttribute("firstName", firstName);
-////        redirectAttributes.addAttribute("lastName", lastName);
-////        redirectAttributes.addAttribute("age", age);
-////        redirectAttributes.addAttribute("sex", sex);
-////        redirectAttributes.addAttribute("weight", weight);
-////        redirectAttributes.addAttribute("height", height);
-////        redirectAttributes.addAttribute("activityLevel", activityLevel);
-////        redirectAttributes.addAttribute("basalMetabolicRate", basalMetabolicRate);
-////        redirectAttributes.addAttribute("totalCalories", totalCalories);
-//        model.addAttribute("login", login);
-//        model.addAttribute("password", password);
-//        model.addAttribute("firstName", firstName);
-//        model.addAttribute("lastName", lastName);
-//        model.addAttribute("age", age);
-//        model.addAttribute("sex", sex);
-//        model.addAttribute("weight", weight);
-//        model.addAttribute("height", height);
-//        model.addAttribute("activityLevel", activityLevel);
-//        model.addAttribute("basalMetabolicRate", basalMetabolicRate);
-//        model.addAttribute("totalCalories", totalCalories);
-//        return "redirect:/register/plan";
-//    }
-//
-//    @GetMapping("/register/plan")
-//    public String showPlanPage(Model model, @RequestParam(value = "login", required = false) String login, @RequestParam(value = "password", required = false) String password, @RequestParam(value = "firstName", required = false) String firstName, @RequestParam(value = "lastName", required = false) String lastName, @RequestParam(value = "age", required = false) Integer age, @RequestParam(value = "sex", required = false) String sex, @RequestParam(value = "weight", required = false) Float weight, @RequestParam(value = "height", required = false) Float height, @RequestParam(value = "activityLevel", required = false) String activityLevel, @RequestParam(value = "basalMetabolicRate", required = false) Float basalMetabolicRate, @RequestParam(value = "totalCalories", required = false) Float totalCalories) {
-//        model.addAttribute("login", login);
-//        model.addAttribute("password", password);
-//        model.addAttribute("firstName", firstName);
-//        model.addAttribute("lastName", lastName);
-//        model.addAttribute("age", age);
-//        model.addAttribute("sex", sex);
-//        model.addAttribute("weight", weight);
-//        model.addAttribute("height", height);
-//        model.addAttribute("activityLevel", activityLevel);
-//        model.addAttribute("basalMetabolicRate", basalMetabolicRate);
-//        model.addAttribute("totalCalories", totalCalories);
-//        return "plan";
-//    }
-//
-//    @PostMapping("/register/plan")
-//    public String processPlanPage(@RequestParam("login") String login, @RequestParam("password") String password, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("age") int age, @RequestParam("sex") String sex, @RequestParam("activityLevel") String activityLevel, RedirectAttributes redirectAttributes) {
-//        redirectAttributes.addAttribute("login", login);
-//        redirectAttributes.addAttribute("password", password);
-//        redirectAttributes.addAttribute("firstName", firstName);
-//        redirectAttributes.addAttribute("lastName", lastName);
-//        redirectAttributes.addAttribute("age", age);
-//        redirectAttributes.addAttribute("sex", sex);
-//        redirectAttributes.addAttribute("activityLevel", activityLevel);
-//        return "redirect:/register/completeReg";
-//    }
-//
-//    @GetMapping("/register/completeReg")
-//    public String showCompleteRegPage() {
-//        return "completeReg";
-//    }
-//
-//    @PostMapping("/register/completeReg+")
-//    public String processCompleteRegPage(@RequestParam("login") String login, @RequestParam("password") String password, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, RedirectAttributes redirectAttributes) {
-////        User user = new User();
-////        user.setLogin(login);
-////        user.setPassword(password);
-////
-////        Person person = new Person();
-////        person.setFirstName(firstName);
-////        person.setLastName(lastName);
-////
-////        user.setPerson(person);
-////        userRepository.save(user);
-////        userService.registerUser(user);
-////        заполнить все поля и связанные сущности
-//
-//        //обращаться ли к отдельному методу запрос-ответ AuthenticationService или сохранить все здесь
-//        return "redirect:/login";
-//    }
 }
-
-
-
-/*
-import com.makogon.foodtracker.model.User;
-import com.makogon.foodtracker.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    //@Autowired
-    private PersonRepository personRepository;
-
-    @Autowired
-    private AuthenticationService authenticationService;
-
-    @PostMapping("/register/completed")
-    public ResponseEntity<AuthenticationResponse> registerUser(@RequestBody RegisterRequest request) {
-        // Создание объектов User и Person
-        User user = new User();
-        user.setLogin(request.getLogin());
-        user.setPassword(request.getPassword());
-
-        Person person = new Person();
-        person.setFirstName(request.getFirstName());
-        person.setLastName(request.getLastName());
-        person.setPlanName(request.getPlanName());
-        person.setBasePlanID(request.getBasePlanID());
-
-         Связывание объектов User и Person
-        user.setPerson(person);
-        person.setUser(user);
-
-         Сохранение объектов в базе данных
-        userRepository.save(user);
-        personRepository.save(person);
-
-        // Выполнение регистрации с использованием AuthenticationService
-        AuthenticationResponse response = authenticationService.register(request);
-
-        return ResponseEntity.ok(response);
-    }
-}
- */
