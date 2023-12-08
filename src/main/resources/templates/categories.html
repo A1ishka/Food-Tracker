@@ -60,12 +60,26 @@
             width: 3%;
             height: auto;
         }
+
         h1 {
             text-align: center;
         }
-        .search{
+
+        .search {
             margin-left: 41%;
         }
+
+        .search_categories button {
+            margin-left: 5%;
+            width: 90%;
+            background-color: #3071a9;
+        }
+
+        .search_categories input {
+            margin-left: 5%;
+            width: 80%;
+        }
+
         input {
             padding: 10px;
             border: 1px solid #ccc;
@@ -88,6 +102,20 @@
         button:hover {
             background-color: #3071a9;
         }
+
+        .header {
+            height: 100px;
+            background-color: #dfbfe8;
+        }
+
+        .header a {
+            font-size: x-large;
+        }
+
+        .header td {
+            padding-left: 100px;
+            padding-top: 35px;
+        }
     </style>
 </head>
 <body>
@@ -99,13 +127,17 @@
                     <a th:href="@{/categories}">Продукты</a>
                 </td>
                 <td>
-                    <a th:href="@{/home}">Личный кабинет</a>
+                    <a th:href="@{/editProfile}">Личный кабинет</a>
                 </td>
                 <td>
-                    <a th:href="@{/categories}">Статистика</a>
+                    <a th:href="@{/}">Статистика</a><!--прописать не ссылками,
+                    а запросами с редиректом страниц-->
                 </td>
                 <td>
                     <a th:href="@{/categories}"><img src="/static/user_icon.png" alt="user_icon"></a>
+                </td>
+                <td>
+                    <a th:href="@{/questions}">Вопросы</a>
                 </td>
             </tr>
         </table>
@@ -115,13 +147,14 @@
     <tr>
         <td class="categories">
             <h1>Категории</h1>
-            <div class="search">
+            <div class="search_categories">
                 <input type="text" id="searchCInput" placeholder="Поиск">
+                <br>
                 <button onclick="searchCategory()">Найти</button>
             </div>
             <div class="categories-card">
                 <ul>
-                    <li th:each="category : ${categories}">
+                    <li th:each="category : ${categories}" class="category-item">
                         <a th:href="@{/category/{categoryID}(categoryID=${category.categoryID})}"
                            th:text="${category.category}"></a>
                     </li>
@@ -129,10 +162,11 @@
             </div>
         </td>
         <td>
-            <h2>Продукты</h2>
             <div class="search">
+                <h2>Список продуктов</h2>
                 <input type="text" id="searchInput" placeholder="Поиск продукта">
                 <button onclick="searchProduct()">Найти</button>
+                <br><br>
             </div>
             <div class="product-cards">
                 <div th:each="product : ${products}" class="product-card">
@@ -158,6 +192,20 @@
                 productCards[i].style.display = "";
             } else {
                 productCards[i].style.display = "none";
+            }
+        }
+    }
+    function searchCategory() {
+        var input = document.getElementById('searchCInput');
+        var filter = input.value.toUpperCase();
+        var categoryItems = document.getElementsByClassName('category-item');
+
+        for (var i = 0; i < categoryItems.length; i++) {
+            var categoryText = categoryItems[i].getElementsByTagName('a')[0].textContent.toUpperCase();
+            if (categoryText.indexOf(filter) > -1) {
+                categoryItems[i].style.display = '';
+            } else {
+                categoryItems[i].style.display = 'none';
             }
         }
     }

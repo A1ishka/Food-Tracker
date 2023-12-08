@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 
 @Data
 @Builder
@@ -19,7 +21,8 @@ public class User implements UserDetails {
     private long userID;
     private String login;
     private String password;
-
+    @Enumerated(EnumType.STRING)
+    private Role role;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "personid")
     private Person person;
@@ -29,7 +32,7 @@ public class User implements UserDetails {
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singleton(new SimpleGrantedAuthority(role.name()));
     }
     @Override
     public String getPassword() {

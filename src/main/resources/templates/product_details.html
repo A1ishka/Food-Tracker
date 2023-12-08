@@ -113,15 +113,15 @@
     </div>
 </div>
 <script>
-    //когда документ готов, проверить роль
-    //админ
-    document.querySelector(".delete-btn").classList.remove("disable-button");
-    document.querySelector(".delete-btn").classList.add("visible-button");
-    document.querySelector(".edit-btn").classList.remove("disable-button");
-    document.querySelector(".edit-btn").classList.add("visible-button");
-    //     document.querySelector(".add-btn").classList.add("disable-button");
-    //     document.querySelector(".add-btn").classList.remove("visible-button");
-    //для юзера не меняем
+    var userRole = document.cookie.replace(/(?:(?:^|.*;\s*)userRole\s*=\s*([^;]*).*$)|^.*$/, "$1");
+    if (userRole === "ROLE_ADMIN") {
+        document.querySelector(".delete-btn").classList.remove("disable-button");
+        document.querySelector(".delete-btn").classList.add("visible-button");
+        document.querySelector(".edit-btn").classList.remove("disable-button");
+        document.querySelector(".edit-btn").classList.add("visible-button");
+        document.querySelector(".add-btn").classList.add("disable-button");
+        document.querySelector(".add-btn").classList.remove("visible-button");
+    }
     function addProduct() {
 
     }

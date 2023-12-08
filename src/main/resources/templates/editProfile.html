@@ -160,6 +160,7 @@
 <body>
 <div class='faq'>
     <h1>Выберите категорию для изменения</h1>
+    <input type="hidden" id="userID" th:value="${user.userID}"/>
     <input id='faq-a' type='checkbox'>
     <label for='faq-a'>
         <p class="faq-heading">Пароль</p>
@@ -174,7 +175,7 @@
         </div>
         <div class="row">
             <div class="col">
-                <button onclick="next1()" class="btn btn-primary btn-block btn-next-1">Сохранить</button>
+                <button onclick="pass_save()" class="btn btn-primary btn-block btn-next-1">Сохранить</button>
             </div>
         </div>
     </label>
@@ -220,7 +221,7 @@
         </div>
         <div class="row">
             <div class="col">
-                <button onclick="next2()" class="btn btn-primary btn-block">Сохранить</button>
+                <button onclick="personal_save()" class="btn btn-primary btn-block">Сохранить</button>
             </div>
         </div>
     </label>
@@ -260,7 +261,7 @@
 
         <div class="row">
             <div class="col">
-                <button onclick="next3()" class="btn btn-primary btn-block">Сохранить</button>
+                <button onclick="body_save()" class="btn btn-primary btn-block">Сохранить</button>
             </div>
         </div>
     </label>
@@ -311,10 +312,15 @@
 
         <div class="row">
             <div class="col">
-                <button onclick="next4()" class="btn btn-primary btn-block">Сохранить</button>
+                <button onclick="plan_save()" class="btn btn-primary btn-block">Сохранить</button>
             </div>
         </div>
     </label>
+<!--    <div class="row">-->
+<!--        <div class="col">-->
+<!--            <button onclick="full_save()" class="btn btn-primary btn-block">Сохранить всё</button>-->
+<!--        </div>-->
+<!--    </div>-->
 </div>
 <script>
     var login = document.getElementById('login').value;
@@ -349,38 +355,140 @@
     var carbs = document.getElementById('carbs').value;
     var calories = document.getElementById('calories').value;
 
-    var form = document.createElement('form');
+    const userID = document.getElementById("userID").value;
 
-    var url = '/register';
-    var formData = new FormData(form);
-    formData.append('login', login);
-    formData.append('password', password);
-    formData.append('firstName', firstName);
-    formData.append('lastName', lastName);
-    formData.append('age', age);
-    formData.append('sex', sex);
-    formData.append('weight', weight);
-    formData.append('height', height);
-    formData.append('activityLevel', activity);
-    formData.append('calories', calories);
-    formData.append('protein', protein);
-    formData.append('fats', fat);
-    formData.append('carbs', carbs);
-    formData.append('plan', selectedPlan);
+    // function full_save() {
+    //
+    //     var full_url = '/editprofile/' + userID + '/password';
+    //     var full_form = document.createElement('form');
+    //
+    //     var formData = new FormData(full_form);
+    //     formData.append('password', password);
+    //     formData.append('firstName', firstName);
+    //     formData.append('lastName', lastName);
+    //     formData.append('age', age);
+    //     formData.append('sex', sex);
+    //     formData.append('weight', weight);
+    //     formData.append('height', height);
+    //     formData.append('activityLevel', activity);
+    //     formData.append('calories', calories);
+    //     formData.append('protein', protein);
+    //     formData.append('fats', fat);
+    //     formData.append('carbs', carbs);
+    //     formData.append('plan', selectedPlan);
+    //
+    //     fetch(full_url, {
+    //         method: 'POST',
+    //         body: formData
+    //     })
+    //         .then(response => response.text())
+    //         .then(data => {
+    //             console.log(data);
+    //         })
+    //         .catch(error => {
+    //             console.error('Произошла ошибка:', error);
+    //         });
+    //     document.body.appendChild(full_form);
+    //     full_form.submit();
+    // }
 
-    fetch(url, {
-        method: 'POST',
-        body: formData
-    })
-        .then(response => response.text())
-        .then(data => {
-            console.log(data);
+    function pass_save() {
+        var password_url = '/editprofile/' + userID + '/password';
+        var password_form = document.createElement('form');
+
+        var password_formData = new FormData(password_form);
+        password_formData.append('password', password);
+
+        fetch(password_url, {
+            method: 'POST',
+            body: password_formData
         })
-        .catch(error => {
-            console.error('Произошла ошибка:', error);
-        });
-    document.body.appendChild(form);
-    form.submit();
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Произошла ошибка:', error);
+            });
+        document.body.appendChild(password_form);
+        password_form.submit();
+    }
+
+    function personal_save() {
+
+        var personal_data_url = '/editprofile/' + userID + '/personaldata';
+        var personal_form = document.createElement('form');
+
+        var personal_formData = new FormData(personal_form);
+        personal_formData.append('firstName', firstName);
+        personal_formData.append('lastName', lastName);
+        personal_formData.append('age', age);
+        personal_formData.append('sex', sex);
+
+        fetch(personal_data_url, {
+            method: 'POST',
+            body: personal_formData
+        })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Произошла ошибка:', error);
+            });
+        document.body.appendChild(personal_form);
+        personal_form.submit();
+    }
+
+    function body_save() {
+        var body_data_url = '/editprofile/' + userID + '/bodydata';
+        var body_form = document.createElement('form');
+        var body_formData = new FormData(body_form);
+        body_formData.append('weight', weight);
+        body_formData.append('height', height);
+        body_formData.append('activityLevel', activity);
+
+        fetch(body_data_url, {
+            method: 'POST',
+            body: body_formDa
+        })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Произошла ошибка:', error);
+            });
+        document.body.appendChild(body_form);
+        body_form.submit();
+    }
+
+    function plan_save() {
+        var plan_url = '/editprofile/' + userID + '/plan';
+        var plan_form = document.createElement('form');
+
+        var plan_formData = new FormData(plan_form);
+        plan_formData.append('calories', calories);
+        plan_formData.append('protein', protein);
+        plan_formData.append('fats', fat);
+        plan_formData.append('carbs', carbs);
+        plan_formData.append('plan', selectedPlan);
+
+        fetch(plan_url, {
+            method: 'POST',
+            body: plan_formData
+        })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Произошла ошибка:', error);
+            });
+        document.body.appendChild(plan_form);
+        plan_form.submit();
+    }
+
 </script>
 </body>
 </html>

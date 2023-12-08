@@ -24,19 +24,18 @@ public class StatisticsController {
         this.personService = personService;
         this.statisticsRepository = statisticsRepository;
     }
-
-//    @GetMapping("/statistics/{login}/{stringDate}")
-//    public String showStatistics(Model model, @RequestParam("login") String login, @RequestParam("stringDate") String stringDate) {
-//        User user = userService.getUserByLogin(login);
-//        Person person = personService.getPersonByUser(user);
-//        BasePlan basePlan = person.getBasePlan();
-//        LocalDate date = LocalDate.parse(stringDate, DateTimeFormatter.ISO_DATE);
-//        Statistics statistics = statisticsRepository.findByPersonAndDate(person, date);
-////не точно, что это вообще работает
-//        model.addAttribute(basePlan);
-//        model.addAttribute(statistics);
-//        return "dailystatictics";
-//    }
+    @GetMapping("/statistics/{login}/{stringDate}")
+    public String showStatistics(Model model, @RequestParam("login") String login, @RequestParam("stringDate") String stringDate) {
+        User user = userService.getUserByLogin(login);
+        Person person = personService.getPersonByUser(user);
+        BasePlan basePlan = person.getBasePlan();
+        LocalDate date = LocalDate.parse(stringDate, DateTimeFormatter.ISO_DATE);
+        Statistics statistics = statisticsRepository.findByPersonAndDate(person, date);
+//не точно, что это вообще работает
+        model.addAttribute(basePlan);
+        model.addAttribute(statistics);
+        return "dailystatictics";
+    }
 
     @PostMapping("/statistics")
     public String updateStatistics(@RequestParam("calories") float consumedCalories,

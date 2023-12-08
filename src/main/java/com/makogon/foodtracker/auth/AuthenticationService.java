@@ -1,7 +1,6 @@
 package com.makogon.foodtracker.auth;
 
 import com.makogon.foodtracker.config.JwtService;
-import com.makogon.foodtracker.model.Person;
 import com.makogon.foodtracker.model.User;
 import com.makogon.foodtracker.register.RegisterRequest;
 import com.makogon.foodtracker.repository.UserRepository;
@@ -22,14 +21,12 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
-                //.firstname(request.getFirstname())
-                //.lastname(request.getLastname())
-                //.email(request.getEmail())
-                //.person(new Person())
                 .login(request.getLogin())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .person(request.getPerson())
+                .role(request.getRole())
                 .build();
-        /*var savedUser =*/ repository.save(user);
+        repository.save(user);
         var jwtToken = jwtService.generateToken(user);
         //var refreshToken = jwtService.generateRefreshToken(user);
         //saveUserToken(savedUser, jwtToken);
@@ -44,6 +41,8 @@ public class AuthenticationService {
                 new UsernamePasswordAuthenticationToken(
                         request.getLogin(),
                         request.getPassword()
+//                        request.getPerson(),
+//                        request.getRole()
                 )
         );
         var user = repository.findByLogin(request.getLogin())

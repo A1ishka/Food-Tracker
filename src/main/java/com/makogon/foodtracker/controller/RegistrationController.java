@@ -20,6 +20,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.makogon.foodtracker.model.Role.ROLE_USER;
+
 @Controller
 public class RegistrationController {
     private final UserService userService;
@@ -76,9 +78,9 @@ public class RegistrationController {
         Plan planName = planRepository.findByplanName(plan).orElse(null);
         BasePlan basePlan = new BasePlan();
         Activity activity = activityRepository.findByactivityName(activityLevel).orElse(null);
-        Person person = new Person();
-        UserDetails userDetails = new UserDetails();
         User user = new User();
+        Person person = user.getPerson();
+        UserDetails userDetails = new UserDetails();
 
         basePlan.setFats(fats);
         basePlan.setCarbs(carbs);
@@ -97,16 +99,17 @@ public class RegistrationController {
         userDetails.setSex(sex);
         userDetails.setPerson(person);
 
-        user.setLogin(login);
-        user.setPassword(password);
-        user.setPerson(person);
+//        user.setLogin(login);
+//        user.setPassword(password);
+//        user.setPerson(person);
+//        user.setRole(ROLE_USER);
 
         basePlanRepository.save(basePlan);
         userDetailsRepository.save(userDetails);
         personRepository.save(person);
         //userRepository.save(user);
 
-        RegisterRequest registerRequest = new RegisterRequest(login, password);
+        RegisterRequest registerRequest = new RegisterRequest(login, password, person, ROLE_USER);
         authenticationService.register(registerRequest);
 
         return "redirect:/completed";
@@ -117,6 +120,15 @@ public class RegistrationController {
         return "completedRegistration";
     }
 
+    @GetMapping("/user")
+    public String showUser() {
+        return "user";
+    }
+
+    @GetMapping("/admin")
+    public String showAdmin() {
+        return "admin";
+    }
 
     @PostMapping("/checkLogin")
     @ResponseBody
@@ -136,26 +148,19 @@ public class RegistrationController {
     public String loginUser(@RequestParam("login") String login,
                             @RequestParam("password") String password,
                             HttpServletResponse response) {
-
-        AuthenticationRequest authRequest = new AuthenticationRequest(login, password);
+        User user = userService.getUserByLogin(login);
+        AuthenticationRequest authRequest = new AuthenticationRequest(login, password/*, user.getPerson(), user.getRole()*/);
         authenticationService.authenticate(authRequest);
-        AuthenticationResponse authenticationResponse =  authenticationService.authenticate(authRequest);
+        AuthenticationResponse authenticationResponse = authenticationService.authenticate(authRequest);
         Cookie cookie = new Cookie("token", authenticationResponse.getAccessToken());
         //cookie.setMaxAge(86400); // Установка срока действия куки (например, 24 часа)
         cookie.setPath("/"); // Установка пути, для которого будет доступна кука (например, весь сайт)
         response.addCookie(cookie);
-
+        Cookie roleCookie = new Cookie("userRole", user.getRole().toString());
+        roleCookie.setPath("/");
+        response.addCookie(roleCookie);
         return "redirect:/categories";
     }
 
-    @GetMapping("/editprofile/{userID}")
-    public String showProfilePage(@PathVariable("userID") Long userID, Model model) {
-        User user = userService.getUserByID(userID);
-        Person person = personService.getPersonByUser(user);
-        UserDetails userDetails = userDetailsService.getUserDetailsByPerson(person);
-        model.addAttribute("user", user);
-        model.addAttribute("person", person);
-        model.addAttribute("userDetails", userDetails);
-        return "editProfile";
-    }
+
 }
