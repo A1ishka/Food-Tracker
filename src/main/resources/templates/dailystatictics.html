@@ -20,12 +20,14 @@
             transition: width 0.3s ease-in-out;
         }
 
-        .progress-bar.colorful {
+        .progress-bar colorful {
             background-color: #28a745;
         }
-        .progress-bar.colorful {
+
+        .progress-bar red {
             background-color: #a7283f;
         }
+
         p {
             margin-left: 25%;
         }
@@ -40,6 +42,7 @@
             border-radius: 7px;
             background-color: #ece9c5;
         }
+
         button {
             width: 30%;
             margin-left: 35%;
@@ -55,34 +58,44 @@
         button:hover {
             background-color: #3071a9;
         }
+        .result{
+            margin-left: 30%;
+        }
+        input, select {
+            width: 60%;
+            height: 30px;
+            font-size: medium;
+            font-family: Verdana;
+        }
     </style>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <body>
 <div class="statistics_card">
     <h1>Статистика потребления КБЖУ</h1>
-
+    <input type="hidden" id="statisticsID" th:value="${statistics.statisticsID}"/>
     <p>Калории: <span th:text="${statistics.calories}"></span>/<span th:text="${basePlan.calories}"></span>
     <div class="progress">
-        <div class="progress-bar" th:style="'width: ' + ${statistics.calories} + '%'"
-             th:class="${statistics.calories < basePlan.calories ? 'progress-bar colorful' : 'progress-bar red'}"></div>
+        <div class="progress-bar" th:style="'width: ' + ${statistics.calories*100/basePlan.calories} + '%'"
+             th:class="${statistics.calories > basePlan.calories ? 'progress-bar colorful' : 'progress-bar red'}"></div>
     </div>
     </p>
     <p>Белки: <span th:text="${statistics.protein}"></span>/<span th:text="${basePlan.protein}"></span>
     <div class="progress">
-        <div class="progress-bar" th:style="'width: ' + ${statistics.protein} + '%'"
-             th:class="${statistics.protein < basePlan.protein ? 'progress-bar colorful' : 'progress-bar red'}"></div>
+        <div class="progress-bar" th:style="'width: ' + ${statistics.protein*100/basePlan.protein} + '%'"
+             th:class="${statistics.protein > basePlan.protein ? 'progress-bar colorful' : 'progress-bar red'}"></div>
     </div>
     </p>
     <p>Жиры: <span th:text="${statistics.fats}"></span>/<span th:text="${basePlan.fats}"></span>
     <div class="progress">
-        <div class="progress-bar" th:style="'width: ' + ${statistics.fats} + '%'"
-             th:class="${statistics.fats < basePlan.fats ? 'progress-bar colorful' : 'progress-bar red'}"></div>
+        <div class="progress-bar" th:style="'width: ' + ${statistics.fats*100/basePlan.fats} + '%'"
+             th:class="${statistics.fats > basePlan.fats ? 'progress-bar colorful' : 'progress-bar red'}"></div>
     </div>
     </p>
     <p>Углеводы: <span th:text="${statistics.carbs}"></span>/<span th:text="${basePlan.carbs}"></span>
     <div class="progress">
-        <div class="progress-bar" th:style="'width: ' + ${statistics.carbs} + '%'"
-             th:class="${statistics.carbs < basePlan.carbs ? 'progress-bar colorful' : 'progress-bar red'}"></div>
+        <div class="progress-bar" th:style="'width: ' + ${statistics.carbs*100/basePlan.carbs} + '%'"
+             th:class="${statistics.carbs > basePlan.carbs ? 'progress-bar colorful' : 'progress-bar red'}"></div>
     </div>
     </p>
 </div>
@@ -98,13 +111,39 @@
         </thead>
         <tbody>
         <tr th:each="productWeight : ${productWeights}">
-            <td th:text="${productWeight.product.name}"></td>
+            <td th:text="${productWeight.product.productName}"></td>
             <td th:text="${productWeight.weight}"></td>
             <td th:class="${productWeight.statistics.calories &lt; basePlan.calories} ? 'progress-bar colorful' : 'progress-bar red'"></td>
         </tr>
         </tbody>
     </table>
-    <button>Добавить</button>
+    <button onclick="addProductToStatistics()">Добавить</button>
 </div>
+<div id="result" class="result"></div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script>
+    function addProductToStatistics() {
+        var statisticsID = $("#statisticsID").val();
+        var url = '/statistics/' + statisticsID;
+
+        var formData = new FormData();
+        formData.append('statisticsID', statisticsID);
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: JSON.stringify(formData),
+            contentType: "application/json",
+            success: function (response) {
+                console.log(response);
+                $("#result").html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error('Произошла ошибка:', error);
+            }
+        });
+    }
+</script>
 </body>
 </html>

@@ -154,11 +154,15 @@ public class RegistrationController {
         AuthenticationResponse authenticationResponse = authenticationService.authenticate(authRequest);
         Cookie cookie = new Cookie("token", authenticationResponse.getAccessToken());
         //cookie.setMaxAge(86400); // Установка срока действия куки (например, 24 часа)
+        //если не передавать значение максимального возраста кук, они будут храниться оч долго(пока не подотрутся)
         cookie.setPath("/"); // Установка пути, для которого будет доступна кука (например, весь сайт)
         response.addCookie(cookie);
         Cookie roleCookie = new Cookie("userRole", user.getRole().toString());
         roleCookie.setPath("/");
         response.addCookie(roleCookie);
+        Cookie userCookie = new Cookie("userID", String.valueOf(user.getUserID()));
+        userCookie.setPath("/");
+        response.addCookie(userCookie);
         return "redirect:/categories";
     }
 

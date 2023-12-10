@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Product</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+</head>
+<body>
+<div class="container">
+    <h1>Add Product</h1>
+    <button class="btn btn-primary" id="addProductButton" onclick="showAddProductForm()">Add Product</button>
+    <div id="addProductForm" style="display: none;">
+        <form action="/addproduct" method="post">
+            <div class="form-group">
+                <label for="productName">Product Name</label>
+                <input type="text" class="form-control" id="productName" name="productName" list="productList" placeholder="Enter product name" value="" autocomplete="on">
+                <datalist id="productList">
+                </datalist>
+            </div>
+            <div class="form-group">
+                <label for="productWeight">Product Weight</label>
+                <input type="number" step="1" min="0" max="1000" class="form-control" id="productWeight" placeholder="Enter product weight">
+            </div>
+            <input type="hidden" id="statisticsID" name="statisticsID" th:value="${statisticsID}">
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script th:inline="javascript">
+    var products = [[${products}]];
+    $(document).ready(function() {
+        var dataList = $("#productList");
+        products.forEach(function (product) {
+            var productName = product.productName;
+            var option = $("<option>").attr("value", productName);
+            dataList.append(option);
+        })
+    });
+</script>
+<script>
+    function showAddProductForm() {
+        var addProductForm = document.getElementById("addProductForm");
+        addProductForm.style.display = "block";
+        var addProductButton = document.getElementById("addProductButton");
+        addProductButton.style.display = "none";
+    }
+
+    $("#productForm").submit(function (event) {
+        event.preventDefault();
+
+        //var statisticsID = [[${statisticsID}]];
+        var productName = $("#productName").val();
+        var statisticsID = $("#statisticsID").val();
+        var productWeight = $("#productWeight").val();
+        var userID = document.cookie.replace(/(?:(?:^|.*;\s*)userID\s*=\s*([^;]*).*$)|^.*$/, "$1");
+        console.log('-----------------')
+        console.log(userID)
+        console.log(userID.toString())
+        console.log('/////////')
+        var data = {
+            productName: productName,
+            productWeight: productWeight,
+            statisticsID: statisticsID,
+            userID: userID
+        };
+
+        $.ajax({
+            url: $(this).attr("action"),
+            type: $(this).attr("method"),
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function (response) {
+                console.log("Product added successfully");
+                console.log(response);
+            },
+            error: function (xhr, status, error) {
+                console.error("Error adding product:", error);
+                console.error("Error status:", status);
+            }
+        });
+    });
+</script>
+</body>
+</html>
