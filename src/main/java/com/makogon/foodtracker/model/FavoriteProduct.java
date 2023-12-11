@@ -1,4 +1,5 @@
 package com.makogon.foodtracker.model;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,18 +11,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "product")
-public class Product {
+@Table(name = "favorite_product")
+public class FavoriteProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long productID;
-    private String productName;
-    private float calories;
-    private float protein;
-    private float fats;
-    private float carbs;
-    private String image_url;
+    private long favoriteproductID;
     @ManyToOne
-    @JoinColumn(name = "categoryid")
-    private Category category;
+    @JoinColumn(name = "productid")
+    private Product product;
+    @ManyToOne
+    @JoinColumn(name = "personid")
+    private Person person;
 }

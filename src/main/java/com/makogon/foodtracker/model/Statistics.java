@@ -23,7 +23,7 @@ public class Statistics {
     private float protein;
     private float fats;
     private float carbs;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "personid")
     private Person person;
 }

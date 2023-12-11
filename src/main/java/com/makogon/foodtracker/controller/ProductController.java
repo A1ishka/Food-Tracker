@@ -2,6 +2,7 @@ package com.makogon.foodtracker.controller;
 
 import com.makogon.foodtracker.model.Category;
 import com.makogon.foodtracker.model.Product;
+import com.makogon.foodtracker.model.User;
 import com.makogon.foodtracker.repository.CategoryRepository;
 import com.makogon.foodtracker.service.CategoryService;
 import com.makogon.foodtracker.service.ProductService;

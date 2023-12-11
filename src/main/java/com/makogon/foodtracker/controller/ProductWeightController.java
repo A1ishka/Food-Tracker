@@ -4,10 +4,7 @@ import com.makogon.foodtracker.model.Product;
 import com.makogon.foodtracker.model.ProductWeight;
 import com.makogon.foodtracker.model.Statistics;
 import com.makogon.foodtracker.model.User;
-import com.makogon.foodtracker.service.PersonService;
-import com.makogon.foodtracker.service.ProductService;
-import com.makogon.foodtracker.service.StatisticsService;
-import com.makogon.foodtracker.service.UserService;
+import com.makogon.foodtracker.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,21 +17,23 @@ import java.util.List;
 @Controller
 public class ProductWeightController {
     private final ProductService productService;
+    private final ProductWeightService productWeightService;
     private final StatisticsService statisticsService;
     private final PersonService personService;
 
     private final UserService userService;
 
     @Autowired
-    public ProductWeightController(ProductService productService, StatisticsService statisticsService, PersonService personService, UserService userService) {
+    public ProductWeightController(ProductService productService, ProductWeightService productWeightService, StatisticsService statisticsService, PersonService personService, UserService userService) {
         this.productService = productService;
+        this.productWeightService = productWeightService;
         this.statisticsService = statisticsService;
         this.personService = personService;
         this.userService = userService;
     }
 
     @PostMapping("/addproduct")
-    public ResponseEntity<String> addProductToStatistics(@RequestParam String productName, @RequestParam long statisticsID, @RequestParam String userID, @RequestParam float weight) {
+    public ResponseEntity<String> addProductToStatistics(@RequestParam String productName, @RequestParam long statisticsID, @RequestParam String userID, @RequestParam String weight) {
         try {
             Product product = productService.getProductByName(productName);
             Statistics statistics = statisticsService.getStatisticsById(statisticsID);
@@ -45,7 +44,7 @@ public class ProductWeightController {
 
             statistics.setPerson(user.getPerson());
             productWeight.setProduct(product);
-            productWeight.setWeight(weight);
+            productWeight.setWeight(Float.valueOf(weight));
             productWeight.setAdd_time(date.toString());
 
             float portion = productWeight.getWeight() / 100;
@@ -63,10 +62,8 @@ public class ProductWeightController {
             }
 
             productWeight.setStatistics(statistics);
-            //statistics.getProductWeights().add(productWeight);
+            productWeightService.saveProductWeight(productWeight);
             statisticsService.saveStatistics(statistics);
-
-            //personService.savePerson(person);
 
             return ResponseEntity.ok("Продукт успешно добавлен к статистике.");
         } catch (Exception e) {
@@ -75,15 +72,25 @@ public class ProductWeightController {
     }
 
     @DeleteMapping("/removeProductFromStatistics")
-    public ResponseEntity<String> removeProductFromStatistics(@RequestParam long productId, @RequestParam long statisticsId, @RequestParam long personId) {
+    public ResponseEntity<String> removeProductFromStatistics(@RequestParam String productWeightID, @RequestParam String statisticsID) {
         try {
-            Product product = productService.getProductById(productId);
-            Statistics statistics = statisticsService.getStatisticsById(statisticsId);
+            long Long_productWeightID = Long.parseLong(productWeightID);
+            long Long_statisticsID = Long.parseLong(statisticsID);
 
+            ProductWeight productWeight = productWeightService.getProductWeightById(Long_productWeightID);
+            Product product = productWeight.getProduct();
+            float portion = productWeight.getWeight() / 100;
+            Statistics statistics = statisticsService.getStatisticsById(Long_statisticsID);
 
+            statistics.setCalories(statistics.getCalories() - product.getCalories() * portion);
+            statistics.setProtein(statistics.getProtein() - product.getProtein() * portion);
+            statistics.setCarbs(statistics.getCarbs() - product.getCarbs() * portion);
+            statistics.setFats(statistics.getFats() - product.getFats() * portion);
+
+            productWeightService.deleteProductWeightById(Long_productWeightID);
             return ResponseEntity.ok("Продукт успешно удален из статистики.");
         } catch (Exception e) {
-            return ResponseEntity.ok(String.valueOf(e));
+            return ResponseEntity.ok("String.valueOf(e)"+"Ошибочка вышла");
         }
     }
 

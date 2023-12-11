@@ -23,11 +23,6 @@ public class StatisticsService {
         return statisticsRepository.findById(statisticsId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid category ID: " + statisticsId));}
 
-
-//    public getStatisticsByPersonAndDate(Person person, String dateString) {
-//        LocalDate date = LocalDate.parse(dateString, DateTimeFormatter.ISO_DATE);
-//        return statisticsRepository.findByPersonAndDate(person, date);
-//    }
     public Statistics saveStatistics(Statistics statistics) {
         return statisticsRepository.save(statistics);
     }

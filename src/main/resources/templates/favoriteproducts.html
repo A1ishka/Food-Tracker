@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Любимые продукты пользователя</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+  <h1>Любимые продукты пользователя</h1>
+
+  <form id="addProductForm">
+    <div class="form-group">
+      <label for="productName">Название продукта:</label>
+      <input type="text" class="form-control" id="productName">
+    </div>
+    <button type="submit" class="btn btn-primary">Добавить</button>
+  </form>
+
+  <ul id="productList" class="list-group" th:each="favoriteProduct : ${favoriteProducts}">
+    <li class="list-group-item" th:text="${favoriteProduct.product.productName}">
+      <button type="button" class="btn btn-danger btn-sm pull-right"
+              th:onclick="'removeProduct(' + ${favoriteProduct.favoriteproductid} + ')'"
+      >Удалить</button>
+    </li>
+  </ul>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<script>
+  function removeProduct(productId) {
+    $.ajax({
+      url: '/removeProductFromStatistics',
+      type: 'DELETE',
+      data: { productId: productId },
+      success: function() {
+        $('#productList li').each(function() {
+          if ($(this).find('button').attr('onclick') === "removeProduct(" + productId + ")") {
+            $(this).remove();
+          }
+        });
+      },
+      error: function() {
+        alert('Не удалось удалить продукт из статистики.');
+      }
+    });
+  }
+
+  $('#addProductForm').submit(function(e) {
+    e.preventDefault();
+    var productName = $('#productName').val();
+    $.post('/addProductToStatistics', { productName: productName })
+            .done(function() {
+              var listItem = $('<li class="list-group-item"></li>');
+              listItem.text(productName);
+
+              var deleteButton = $('<button type="button" class="btn btn-danger btn-sm pull-right">Удалить</button>');
+              deleteButton.click(function() {
+                removeProduct(productId);
+              });
+
+              listItem.append(deleteButton);
+              $('#productList').append(listItem);
+              $('#productName').val('');
+            })
+            .fail(function() {
+              alert('Не удалось добавить продукт в статистику.');
+            });
+  });
+</script>
+</body>
+</html>

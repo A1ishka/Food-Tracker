@@ -36,7 +36,7 @@
             padding: 20px;
             margin-left: 30%;
             margin-right: 35%;
-            margin-top: 10%;
+            margin-top: 5%;
             border-color: yellow;
             border-width: medium;
             border-radius: 7px;
@@ -44,8 +44,7 @@
         }
 
         button {
-            width: 30%;
-            margin-left: 35%;
+            width: 100%;
             margin-top: 10px;
             padding: 10px;
             background-color: #440755;
@@ -58,14 +57,10 @@
         button:hover {
             background-color: #3071a9;
         }
-        .result{
-            margin-left: 30%;
-        }
+
         input, select {
             width: 60%;
-            height: 30px;
             font-size: medium;
-            font-family: Verdana;
         }
     </style>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -107,13 +102,17 @@
             <th>Продукт</th>
             <th>Вес</th>
             <th>Калораж</th>
+            <th> </th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="productWeight : ${productWeights}">
+        <tr th:each="productWeight : ${productWeights}" th:if="${productWeight.statistics.statisticsID == statistics.statisticsID}">
             <td th:text="${productWeight.product.productName}"></td>
             <td th:text="${productWeight.weight}"></td>
-            <td th:class="${productWeight.statistics.calories &lt; basePlan.calories} ? 'progress-bar colorful' : 'progress-bar red'"></td>
+            <td th:class="${productWeight.product.calories * productWeight.weight}"></td>
+            <td>
+                <button class="btn btn-danger" onclick="confirmDelete('${productWeight.statistics.statisticsID}', '${productWeight.productWeightID}')">Удалить</button>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -141,6 +140,24 @@
             },
             error: function (xhr, status, error) {
                 console.error('Произошла ошибка:', error);
+            }
+        });
+    }
+    function confirmDelete(statisticsID, productWeightID) {
+        if (confirm("Вы уверены, что хотите удалить?")) {
+            deleteProductWeightFromStatistics(statisticsID, productWeightID);
+        }
+    }
+    function deleteProductWeightFromStatistics(statisticsID, productWeightID) {
+        $.ajax({
+            url: '/removeProductFromStatistics',
+            type: 'DELETE',
+            data: {
+                productWeightID: productWeightID,
+                statisticsID: statisticsID
+            },
+            success: function(response) {},
+            error: function(xhr, status, error) {
             }
         });
     }

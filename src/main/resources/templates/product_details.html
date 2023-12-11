@@ -98,7 +98,7 @@
         </div>
     </div>
     <div class="button-group visible-button add-btn">
-        <button onclick="addProduct()">Добавить в избранные</button>
+        <button onclick="addProductToFavorite()">Добавить в избранные</button>
     </div>
     <div class="button-group disable-button delete-btn">
         <button onclick="deleteProduct()">Удалить</button>
@@ -122,8 +122,31 @@
         document.querySelector(".add-btn").classList.add("disable-button");
         document.querySelector(".add-btn").classList.remove("visible-button");
     }
-    function addProduct() {
+    function addProductToFavorite() {
+        var urlObject = new URL(window.location.href);
+        var url = urlObject.pathname;
+        var parts = url.split("/");
+        var productID = parts.pop();
+        var userID = document.cookie.replace(/(?:(?:^|.*;\s*)userID\s*=\s*([^;]*).*$)|^.*$/, "$1");
+        var data = {
+            productID: productID,
+            userID: userID
+        };
 
+        $.ajax({
+            url: "/addtofavorite",
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function (response) {
+                console.log("Product added successfully");
+                console.log(response);
+            },
+            error: function (xhr, status, error) {
+                console.error("Error adding product:", error);
+                console.error("Error status:", status);
+            }
+        });
     }
 
     function deleteProduct() {

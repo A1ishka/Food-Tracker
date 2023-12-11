@@ -43,9 +43,9 @@ public class StatisticsController {
         BasePlan basePlan = person.getBasePlan();
         List<ProductWeight> productWeights = productWeightRepository.findByStatistics(statistics);
 
-        model.addAttribute(basePlan);
-        model.addAttribute(statistics);
-        model.addAttribute(productWeights);
+        model.addAttribute("basePlan", basePlan);
+        model.addAttribute("statistics", statistics);
+        model.addAttribute("productWeights", productWeights);
         return "dailystatictics";
     }
     @PostMapping("/statistics/{statisticsID}")
