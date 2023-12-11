@@ -53,14 +53,22 @@ public class StatisticsController {
         redirectAttributes.addAttribute("statisticsID", statisticsID);
         return "redirect:/addproduct";
     }
+
+    @PostMapping("/viewstatistics/{statisticsID}")
+    public String viewStatisticsID(@PathVariable("statisticsID") Long statisticsID, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addAttribute("statisticsID", statisticsID);
+        return "redirect:/statistics/{statisticsID}";
+    }
     @GetMapping("/statistics")
     public String getStatisticsPage(@RequestParam(defaultValue = "0") int page, Model model) {
-        Pageable pageable = PageRequest.of(page, 10); // Установите размер страницы, например, 10 элементов на странице
+        Pageable pageable = PageRequest.of(page, 10);
         Page<Statistics> statisticsPage = statisticsRepository.findAll(pageable);
         model.addAttribute("statisticsPage", statisticsPage);
         model.addAttribute("currentPage", page);
         return "statistics";
     }
+    @PostMapping("/viewstatistics")
+    public String viewStatisticsPage() { return "redirect:/statistics"; }
     @PostMapping("/statistics/{statisticsId}/addProduct")
     public String addProductToStatistics(@PathVariable Long statisticsId,
                                          @RequestParam Long productId,

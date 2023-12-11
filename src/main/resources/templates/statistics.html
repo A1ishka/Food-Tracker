@@ -8,7 +8,6 @@
 <body>
 <div class="container">
     <h1>Statistics</h1>
-
     <table class="table">
         <thead>
         <tr>
@@ -21,17 +20,20 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="stat : ${statisticsPage.content}">
+        <tr th:each="stat : ${statisticsPage.content}" th:if="${productWeight.statistics.statisticsID == statistics.statisticsID}">
             <td th:text="${stat.date}"></td>
             <td th:text="${stat.calories}"></td>
             <td th:text="${stat.protein}"></td>
             <td th:text="${stat.fats}"></td>
             <td th:text="${stat.carbs}"></td>
-            <td><button th:onclick="window.location.href='statistics/' + ${stat.statisticsID}">Открыть</button></td>
+            <td>
+                <form id="openForm" method="post" th:action="'viewstatistics/' + ${stat.statisticsID}">
+                    <button type="submit">Открыть</button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>
-
     <div>
         <a th:href="@{/statistics?page=${currentPage - 1}}">&lt; Prev</a>
         <span th:text="${currentPage}"></span>

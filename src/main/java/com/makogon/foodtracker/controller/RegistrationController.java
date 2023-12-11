@@ -47,7 +47,10 @@ public class RegistrationController {
         this.basePlanRepository = basePlanRepository;
         this.authenticationService = authenticationService;
     }
-
+    @PostMapping("/viewregister")
+    public String viewRegisterPage() {
+        return "redirect:/register";
+    }
     @GetMapping("/register")
     public String showRegisterPage() {
         return "registration";

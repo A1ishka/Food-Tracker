@@ -99,6 +99,14 @@
             cursor: pointer;
         }
 
+        .nav-link btn button {
+            background-color: #dfbfe8;
+            height: 100%;
+            width: 100%;
+        }
+        .nav-link btn{
+            font-size: xxx-large;
+        }
         button:hover {
             background-color: #3071a9;
         }
@@ -124,20 +132,27 @@
         <table>
             <tr>
                 <td>
-                    <a th:href="@{/categories}">Продукты</a>
+                    <form id="categoriesForm" method="post" action="/categories">
+                        <button type="submit" class="nav-link btn">Продукты</button>
+                    </form>
                 </td>
                 <td>
-                    <a th:href="@{/editProfile}">Личный кабинет</a>
+                    <form id="editProfileForm" method="post" action="/vieweditprofile">
+                        <button type="submit" class="nav-link btn">Личный кабинет</button>
+                    </form>
                 </td>
                 <td>
-                    <a th:href="@{/}">Статистика</a><!--прописать не ссылками,
-                    а запросами с редиректом страниц-->
+                    <form id="statisticsForm" method="post" action="/viewstatistics">
+                        <button type="submit" class="nav-link btn">Статистика</button>
+                    </form>
                 </td>
                 <td>
-                    <a th:href="@{/categories}"><img src="/static/user_icon.png" alt="user_icon"></a>
+                    <form id="loginForm" method="post" action="/viewregister">
+                        <button type="submit" class="nav-link btn">Регистрация</button>
+                    </form>
                 </td>
                 <td>
-                    <a th:href="@{/questions}">Вопросы</a>
+                    <a th:href="@{/questions}"><button class="nav-link btn">Вопросы</button></a>
                 </td>
             </tr>
         </table>
@@ -195,6 +210,7 @@
             }
         }
     }
+
     function searchCategory() {
         var input = document.getElementById('searchCInput');
         var filter = input.value.toUpperCase();

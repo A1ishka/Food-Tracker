@@ -47,56 +47,11 @@ public class ProfileController {
         model.addAttribute("userDetails", userDetails);
         return "editProfile";
     }
-    //    @PostMapping("/editprofile/{userID}")
-//    public String editProfilePage(@PathVariable("userID") Long userID,
-//                                  @RequestParam("password") String password,
-//                                  @RequestParam("firstName") String firstName,
-//                                  @RequestParam("lastName") String lastName,
-//                                  @RequestParam("age") Integer age,
-//                                  @RequestParam("sex") String sex,
-//                                  @RequestParam("weight") Float weight,
-//                                  @RequestParam("height") Float height,
-//                                  @RequestParam("activityLevel") String activityLevel,
-//                                  @RequestParam("calories") Float calories,
-//                                  @RequestParam("protein") Float protein,
-//                                  @RequestParam("fats") Float fats,
-//                                  @RequestParam("carbs") Float carbs,
-//                                  @RequestParam("plan") String plan) {
-//        User user = userService.getUserByID(userID);
-//        Person person = personService.getPersonByUser(user);
-//        UserDetails userDetails = userDetailsService.getUserDetailsByPerson(person);
-//        BasePlan basePlan = person.getBasePlan();
-//        Plan planName = planRepository.findByplanName(plan).orElse(null);
-//        Activity activity = activityRepository.findByactivityName(activityLevel).orElse(null);
-//
-//        basePlan.setFats(fats);
-//        basePlan.setCarbs(carbs);
-//        basePlan.setProtein(protein);
-//        basePlan.setCalories(calories);
-//        basePlan.setPlan(planName);
-//
-//        person.setFirstName(firstName);
-//        person.setLastName(lastName);
-//        person.setBasePlan(basePlan);
-//
-//        userDetails.setHeight(height);
-//        userDetails.setWeight(weight);
-//        userDetails.setAge(age);
-//        userDetails.setActivity(activity);
-//        userDetails.setSex(sex);
-//        userDetails.setPerson(person);
-//
-//        user.setLogin(user.getLogin());
-//        user.setPassword(password);
-//        user.setPerson(person);
-//        user.setRole(ROLE_USER);
-//
-//        basePlanRepository.save(basePlan);
-//        userDetailsRepository.save(userDetails);
-//        personRepository.save(person);
-//        userRepository.save(user);
-//        return "redirect:/categories";
-//    }
+    @PostMapping("/vieweditprofile/{userID}")
+    public String viewProfilePage(@PathVariable("userID") Long userID, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addAttribute("userID", userID);
+        return "redirect:/editProfile/{userID}";
+    }
     @PostMapping("/editprofile/{userID}/password")
     public String editProfilePassword(@PathVariable("userID") Long userID,
                                       @RequestParam("password") String password) {
@@ -187,4 +142,54 @@ public class ProfileController {
         return "questions";
     }
 
+//    @PostMapping("/editprofile/{userID}")
+//    public String editProfilePage(@PathVariable("userID") Long userID,
+//                                  @RequestParam("password") String password,
+//                                  @RequestParam("firstName") String firstName,
+//                                  @RequestParam("lastName") String lastName,
+//                                  @RequestParam("age") Integer age,
+//                                  @RequestParam("sex") String sex,
+//                                  @RequestParam("weight") Float weight,
+//                                  @RequestParam("height") Float height,
+//                                  @RequestParam("activityLevel") String activityLevel,
+//                                  @RequestParam("calories") Float calories,
+//                                  @RequestParam("protein") Float protein,
+//                                  @RequestParam("fats") Float fats,
+//                                  @RequestParam("carbs") Float carbs,
+//                                  @RequestParam("plan") String plan) {
+//        User user = userService.getUserByID(userID);
+//        Person person = personService.getPersonByUser(user);
+//        UserDetails userDetails = userDetailsService.getUserDetailsByPerson(person);
+//        BasePlan basePlan = person.getBasePlan();
+//        Plan planName = planRepository.findByplanName(plan).orElse(null);
+//        Activity activity = activityRepository.findByactivityName(activityLevel).orElse(null);
+//
+//        basePlan.setFats(fats);
+//        basePlan.setCarbs(carbs);
+//        basePlan.setProtein(protein);
+//        basePlan.setCalories(calories);
+//        basePlan.setPlan(planName);
+//
+//        person.setFirstName(firstName);
+//        person.setLastName(lastName);
+//        person.setBasePlan(basePlan);
+//
+//        userDetails.setHeight(height);
+//        userDetails.setWeight(weight);
+//        userDetails.setAge(age);
+//        userDetails.setActivity(activity);
+//        userDetails.setSex(sex);
+//        userDetails.setPerson(person);
+//
+//        user.setLogin(user.getLogin());
+//        user.setPassword(password);
+//        user.setPerson(person);
+//        user.setRole(ROLE_USER);
+//
+//        basePlanRepository.save(basePlan);
+//        userDetailsRepository.save(userDetails);
+//        personRepository.save(person);
+//        userRepository.save(user);
+//        return "redirect:/categories";
+//    }
 }
