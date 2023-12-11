@@ -20,7 +20,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="stat : ${statisticsPage.content}" th:if="${productWeight.statistics.statisticsID == statistics.statisticsID}">
+        <tr th:each="stat : ${statisticsPage.content}"  th:if="${userID == stat.person.personID}">
             <td th:text="${stat.date}"></td>
             <td th:text="${stat.calories}"></td>
             <td th:text="${stat.protein}"></td>

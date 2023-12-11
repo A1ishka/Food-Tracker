@@ -5,6 +5,8 @@ import com.makogon.foodtracker.repository.*;
 import com.makogon.foodtracker.service.MyUserDetailsService;
 import com.makogon.foodtracker.service.PersonService;
 import com.makogon.foodtracker.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,9 +38,30 @@ public class ProfileController {
         this.activityRepository = activityRepository;
         this.basePlanRepository = basePlanRepository;
     }
-
-    @GetMapping("/editprofile/{userID}")
-    public String showProfilePage(@PathVariable("userID") Long userID, Model model) {
+//    @PostMapping("/vieweditprofile/{userID}")
+//    public String viewProfilePage(@PathVariable("userID") Long userID, RedirectAttributes redirectAttributes) {
+//        redirectAttributes.addAttribute("userID", userID);
+//        return "redirect:/editProfile/{userID}";
+//    }
+    @PostMapping("/vieweditprofile")
+    public String viewProfilePage() {
+        return "redirect:/editprofile";
+    }
+    @GetMapping("/editprofile")
+    public String showProfilePage(HttpServletRequest request, Model model) {
+        Cookie[] cookies = request.getCookies();
+        long userID = 0;
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("userID".equals(cookie.getName())) {
+                    if (cookie.getValue() != null) {
+                        //userID = Long.getLong(cookie.getValue());
+                        userID = 12;
+                        break;
+                    }
+                }
+            }
+        }
         User user = userService.getUserByID(userID);
         Person person = personService.getPersonByUser(user);
         UserDetails userDetails = userDetailsService.getUserDetailsByPerson(person);
@@ -47,11 +70,7 @@ public class ProfileController {
         model.addAttribute("userDetails", userDetails);
         return "editProfile";
     }
-    @PostMapping("/vieweditprofile/{userID}")
-    public String viewProfilePage(@PathVariable("userID") Long userID, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addAttribute("userID", userID);
-        return "redirect:/editProfile/{userID}";
-    }
+
     @PostMapping("/editprofile/{userID}/password")
     public String editProfilePassword(@PathVariable("userID") Long userID,
                                       @RequestParam("password") String password) {

@@ -168,6 +168,4 @@ public class RegistrationController {
         response.addCookie(userCookie);
         return "redirect:/categories";
     }
-
-
 }

@@ -41,6 +41,8 @@ public class SecurityConfiguration {
                 .requestMatchers(new AntPathRequestMatcher("/viewstatistics/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/vieweditprofile/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/viewregister/**")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/viewfavorite/**")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/myfavorite/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/addproduct/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/removeProductFromStatistics/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/dailystatistics/**")).permitAll()

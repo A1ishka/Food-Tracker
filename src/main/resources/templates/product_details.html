@@ -128,25 +128,26 @@
         var parts = url.split("/");
         var productID = parts.pop();
         var userID = document.cookie.replace(/(?:(?:^|.*;\s*)userID\s*=\s*([^;]*).*$)|^.*$/, "$1");
-        var data = {
-            productID: productID,
-            userID: userID
-        };
 
-        $.ajax({
-            url: "/addtofavorite",
-            type: "POST",
-            data: JSON.stringify(data),
-            contentType: "application/json",
-            success: function (response) {
-                console.log("Product added successfully");
-                console.log(response);
-            },
-            error: function (xhr, status, error) {
-                console.error("Error adding product:", error);
-                console.error("Error status:", status);
-            }
-        });
+        var form = document.createElement('form');
+        var url = '/addtofavorite';
+        var formData = new FormData(form);
+        formData.append('productID', productID);
+        formData.append('userID', userID);
+
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Произошла ошибка:', error);
+            });
+        document.body.appendChild(form);
+        form.submit();
     }
 
     function deleteProduct() {

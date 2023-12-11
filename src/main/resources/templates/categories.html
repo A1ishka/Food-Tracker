@@ -104,9 +104,11 @@
             height: 100%;
             width: 100%;
         }
-        .nav-link btn{
+
+        .nav-link btn {
             font-size: xxx-large;
         }
+
         button:hover {
             background-color: #3071a9;
         }
@@ -125,6 +127,7 @@
             padding-top: 35px;
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <header>
@@ -134,6 +137,11 @@
                 <td>
                     <form id="categoriesForm" method="post" action="/categories">
                         <button type="submit" class="nav-link btn">Продукты</button>
+                    </form>
+                </td>
+                <td>
+                    <form id="favoriteForm" method="post" action="/viewfavorite">
+                        <button type="submit" class="nav-link btn">Избранное</button>
                     </form>
                 </td>
                 <td>
@@ -152,7 +160,9 @@
                     </form>
                 </td>
                 <td>
-                    <a th:href="@{/questions}"><button class="nav-link btn">Вопросы</button></a>
+                    <a th:href="@{/questions}">
+                        <button class="nav-link btn">Вопросы</button>
+                    </a>
                 </td>
             </tr>
         </table>
