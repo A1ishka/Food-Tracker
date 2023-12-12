@@ -161,6 +161,11 @@ public class ProfileController {
         return "questions";
     }
 
+    @GetMapping("/map")
+    public String showMap() {
+        return "map";
+    }
+
 //    @PostMapping("/editprofile/{userID}")
 //    public String editProfilePage(@PathVariable("userID") Long userID,
 //                                  @RequestParam("password") String password,
