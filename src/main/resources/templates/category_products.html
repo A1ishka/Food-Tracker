@@ -105,9 +105,62 @@
         .sortButton, .filterButton {
             width: 33%;
         }
+
+        .header {
+            height: 100px;
+            background-color: #dfbfe8;
+        }
+
+        .header a {
+            font-size: x-large;
+        }
+
+        .header td {
+            padding-left: 100px;
+            padding-top: 35px;
+        }
     </style>
 </head>
 <body>
+
+<header>
+    <div class="header">
+        <table>
+            <tr>
+                <td>
+                    <form id="categoriesForm" method="post" action="/categories">
+                        <button type="submit" class="nav-link btn">Продукты</button>
+                    </form>
+                </td>
+                <td>
+                    <form id="favoriteForm" method="post" action="/viewfavorite">
+                        <button type="submit" class="nav-link btn">Избранное</button>
+                    </form>
+                </td>
+                <td>
+                    <form id="editProfileForm" method="post" action="/vieweditprofile">
+                        <button type="submit" class="nav-link btn">Личный кабинет</button>
+                    </form>
+                </td>
+                <td>
+                    <form id="statisticsForm" method="post" action="/viewstatistics">
+                        <button type="submit" class="nav-link btn">Статистика</button>
+                    </form>
+                </td>
+                <td>
+                    <form id="loginForm" method="post" action="/viewregister">
+                        <button type="submit" class="nav-link btn">Регистрация</button>
+                    </form>
+                </td>
+                <td>
+                    <a th:href="@{/questions}">
+                        <button class="nav-link btn">Вопросы</button>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
 <h1>Продукты категории <span th:text="${category.category}"></span>:</h1>
 <div class="search">
 
@@ -121,9 +174,8 @@
     <br>
     <div class="filter">
         <label for="caloriesMinInput">Калории:</label>
-        <input type="number" id="caloriesMinInput" placeholder="Мин">
-
-        <input type="number" id="caloriesMaxInput" placeholder="Макс">
+        <input type="number" id="caloriesMinInput" placeholder="Мин" value="0">
+        <input type="number" id="caloriesMaxInput" placeholder="Макс" value="1000">
     </div>
 
 <!--    <div class="filter">-->
@@ -192,55 +244,8 @@
             }
         }
     }
-
-    var allProductCards = document.getElementsByClassName("product-card");
+    var allProductCards = document.getElementsByClassName("product-cards");
     var filteredProductCards = Array.from(allProductCards);
-
-    function filterProducts() {
-        var searchInput = document.getElementById("searchInput").value.toLowerCase();
-        var caloriesMinInput = parseFloat(document.getElementById("caloriesMinInput").value) || 0;
-        var caloriesMaxInput = parseFloat(document.getElementById("caloriesMaxInput").value) || 1000;
-        // var proteinMinInput = parseFloat(document.getElementById("proteinMinInput").value) || 0;
-        // var proteinMaxInput = parseFloat(document.getElementById("proteinMaxInput").value) || 1000;
-        // var fatMinInput = parseFloat(document.getElementById("fatMinInput").value) || 0;
-        // var fatMaxInput = parseFloat(document.getElementById("fatMaxInput").value) || 1000;
-        // var carbsMinInput = parseFloat(document.getElementById("carbsMinInput").value) || 0;
-        // var carbsMaxInput = parseFloat(document.getElementById("carbsMaxInput").value) || 1000;
-
-        filteredProductCards = Array.from(allProductCards).filter(function (card) {
-            var productName = card.getElementsByTagName("h2")[0].textContent.toLowerCase();
-            var calories = document.getElementById("calories").value
-            console.log(calories)
-            // var protein = parseFloat(card.dataset.protein);
-            // var fat = parseFloat(card.dataset.fat);
-            // var carbs = parseFloat(card.dataset.carbs);
-
-            return (
-                productName.indexOf(searchInput) > -1 &&
-                calories >= caloriesMinInput && calories <= caloriesMaxInput //&&
-                // protein >= proteinMinInput && protein <= proteinMaxInput &&
-                // fat >= fatMinInput && fat <= fatMaxInput &&
-                // carbs >= carbsMinInput && carbs <= carbsMaxInput
-            );
-        });
-
-        updateProductCardVisibility();
-    }
-
-    function resetFilter() {
-        document.getElementById("searchInput").value = "";
-        document.getElementById("caloriesMinInput").value = "";
-        document.getElementById("caloriesMaxInput").value = "";
-        document.getElementById("proteinMinInput").value = "";
-        document.getElementById("proteinMaxInput").value = "";
-        document.getElementById("fatMinInput").value = "";
-        document.getElementById("fatMaxInput").value = "";
-        document.getElementById("carbsMaxInput").value = "";
-        document.getElementById("carbsMinInput").value = "";
-        filteredProductCards = Array.from(allProductCards);
-        updateProductCardVisibility();
-    }
-
     function sortAlphabetically() {
         filteredProductCards.sort(function (a, b) {
             var productNameA = a.getElementsByTagName("h2")[0].textContent.toLowerCase();
@@ -260,23 +265,44 @@
 
         updateProductCardOrder();
     }
-
-    function updateProductCardVisibility() {
-        for (var i = 0; i < allProductCards.length; i++) {
-            if (filteredProductCards.includes(allProductCards[i])) {
-                allProductCards[i].style.display = "";
-            } else {
-                allProductCards[i].style.display = "none";
-            }
-        }
-    }
-
     function updateProductCardOrder() {
         var productCardsContainer = document.querySelector(".product-cards");
 
         filteredProductCards.forEach(function (card) {
             productCardsContainer.appendChild(card);
         });
+    }
+</script>
+<script th:inline="javascript">
+    function filterProducts() {
+        var caloriesMin = parseFloat(document.getElementById("caloriesMinInput").value);
+        var caloriesMax = parseFloat(document.getElementById("caloriesMaxInput").value);
+
+        var products = [[${products}]];
+
+        for (var i = 0; i < products.length; i++) {
+            var product = products[i];
+            var allProductCards = document.getElementsByClassName("product-card")[i];
+            console.log(allProductCards)
+            var calories = parseFloat(product.calories);
+            console.log(product.calories)
+
+            if (calories >= caloriesMin && calories <= caloriesMax) {
+                allProductCards.style.display = "block";
+            } else {
+                allProductCards.style.display = "none";
+            }
+        }
+    }
+
+    function resetFilter() {
+        document.getElementById("caloriesMinInput").value = "";
+        document.getElementById("caloriesMaxInput").value = "";
+
+        var products = document.getElementsByClassName("product");
+        for (var i = 0; i < products.length; i++) {
+            products[i].style.display = "block";
+        }
     }
 </script>
 </script>
