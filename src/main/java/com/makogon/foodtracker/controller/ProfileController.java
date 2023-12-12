@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 public class ProfileController {
     private final UserService userService;
@@ -43,6 +45,18 @@ public class ProfileController {
 //        redirectAttributes.addAttribute("userID", userID);
 //        return "redirect:/editProfile/{userID}";
 //    }
+
+    @PostMapping("/viewuserpage")
+    public String viewUserPage() {
+        return "redirect:/userpage";
+    }
+    @GetMapping("/userpage")
+    public String showUserPage(Model model) {
+        List<User> users = userService.getAll();
+        model.addAttribute("users", users);
+        return "userPage";
+    }
+
     @PostMapping("/vieweditprofile")
     public String viewProfilePage() {
         return "redirect:/editprofile";

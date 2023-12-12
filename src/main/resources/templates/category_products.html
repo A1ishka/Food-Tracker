@@ -127,25 +127,39 @@
     <div class="header">
         <table>
             <tr>
+
                 <td>
-                    <form id="categoriesForm" method="post" action="/categories">
+                    <form id="categoriesForm" method="post" action="/viewcategories">
                         <button type="submit" class="nav-link btn">Продукты</button>
                     </form>
                 </td>
                 <td>
-                    <form id="favoriteForm" method="post" action="/viewfavorite">
-                        <button type="submit" class="nav-link btn">Избранное</button>
-                    </form>
+                    <div class="">
+                        <form id="favoriteForm" method="post" action="/viewfavorite">
+                            <button type="submit" class="nav-link btn favoriets">Избранное</button>
+                        </form>
+                    </div>
                 </td>
                 <td>
-                    <form id="editProfileForm" method="post" action="/vieweditprofile">
-                        <button type="submit" class="nav-link btn">Личный кабинет</button>
-                    </form>
+                    <div class="">
+                        <form id="editProfileForm" method="post" action="/vieweditprofile">
+                            <button type="submit" class="nav-link btn profile">Личный кабинет</button>
+                        </form>
+                    </div>
                 </td>
                 <td>
-                    <form id="statisticsForm" method="post" action="/viewstatistics">
-                        <button type="submit" class="nav-link btn">Статистика</button>
-                    </form>
+                    <div class="">
+                        <form id="statisticsForm" method="post" action="/viewstatistics">
+                            <button type="submit" class="nav-link btn statistics">Статистика</button>
+                        </form>
+                    </div>
+                </td>
+                <td>
+                    <div class="">
+                        <form id="userForm" method="post" action="/viewuserpage">
+                            <button type="submit" class="nav-link btn users disable-button">Пользователи</button>
+                        </form>
+                    </div>
                 </td>
                 <td>
                     <form id="loginForm" method="post" action="/viewregister">

@@ -4,6 +4,23 @@
     <meta charset="UTF-8">
     <title>Statistics Page</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: linear-gradient(to bottom, hsl(273, 75%, 66%), hsl(240, 73%, 65%));
+        }
+        button {
+            width: 30%;
+            padding: 10px;
+            background-color: #440755;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #3071a9;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -20,7 +37,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="stat : ${statisticsPage.content}"  th:if="${userID == stat.person.personID}">
+        <tr th:each="stat : ${statisticsPage.content}" th:if="${userID == stat.person.personID}">
             <td th:text="${stat.date}"></td>
             <td th:text="${stat.calories}"></td>
             <td th:text="${stat.protein}"></td>
