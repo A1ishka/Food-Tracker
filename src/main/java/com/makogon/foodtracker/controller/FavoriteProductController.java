@@ -57,6 +57,33 @@ public class FavoriteProductController {
 
         favoriteProductRepository.save(favoriteProduct);
     }
+
+    @PostMapping("/addProductToFavorites")
+    public void addProductToFavorites(@RequestParam("productName") String productName, HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        long userID = 0;
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("userID".equals(cookie.getName())) {
+                    if (cookie.getValue() != null) {
+                        //userID = Long.getLong(cookie.getValue());
+                        userID = 12;
+                        break;
+                    }
+                }
+            }
+        }
+        User user = userService.getUserByID(userID);
+        Person person = user.getPerson();
+        Product product = productService.getProductByName(productName);
+
+        FavoriteProduct favoriteProduct = new FavoriteProduct();
+        favoriteProduct.setProduct(product);
+        favoriteProduct.setPerson(person);
+
+        favoriteProductRepository.save(favoriteProduct);
+    }
+
 //    @PostMapping("/viewfavorite/{userID}")
 //    public String viewFavorite(@PathVariable("userID") Long userID, RedirectAttributes redirectAttributes) {
 //        redirectAttributes.addAttribute("userID", userID);
@@ -84,6 +111,7 @@ public class FavoriteProductController {
         User user = userService.getUserByID(userID);
         List<FavoriteProduct> favoriteProducts = favoriteProductRepository.findAllByPerson(user.getPerson());
         model.addAttribute("favoriteProducts", favoriteProducts);
+        model.addAttribute("userID", userID);
         return "favoriteproducts";
     }
     @PostMapping("/myfavorite")
@@ -129,5 +157,10 @@ public class FavoriteProductController {
         } catch (Exception e) {
             return ResponseEntity.ok(String.valueOf(e));
         }
+    }
+    @PostMapping("/removeFromFavorites")
+    public ResponseEntity<String> removeFromFavorites(@RequestParam("favoriteProductID") long favoriteProductID) {
+        favoriteProductRepository.deleteById(favoriteProductID);
+        return ResponseEntity.ok("Продукт успешно удален из избранных.");
     }
 }

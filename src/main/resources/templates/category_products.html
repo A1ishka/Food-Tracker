@@ -174,8 +174,8 @@
     <br>
     <div class="filter">
         <label for="caloriesMinInput">Калории:</label>
-        <input type="number" id="caloriesMinInput" placeholder="Мин" value="0">
-        <input type="number" id="caloriesMaxInput" placeholder="Макс" value="1000">
+        <input type="number" id="caloriesMinInput" placeholder="Мин" min="0" max="1000" value="1">
+        <input type="number" id="caloriesMaxInput" placeholder="Макс" min="0" max="1000" value="1000">
     </div>
 
 <!--    <div class="filter">-->
@@ -244,8 +244,10 @@
             }
         }
     }
+
     var allProductCards = document.getElementsByClassName("product-cards");
     var filteredProductCards = Array.from(allProductCards);
+
     function sortAlphabetically() {
         filteredProductCards.sort(function (a, b) {
             var productNameA = a.getElementsByTagName("h2")[0].textContent.toLowerCase();
@@ -255,7 +257,6 @@
 
         updateProductCardOrder();
     }
-
     function sortReverseAlphabetically() {
         filteredProductCards.sort(function (a, b) {
             var productNameA = a.getElementsByTagName("h2")[0].textContent.toLowerCase();
@@ -296,15 +297,14 @@
     }
 
     function resetFilter() {
-        document.getElementById("caloriesMinInput").value = "";
-        document.getElementById("caloriesMaxInput").value = "";
+        document.getElementById("caloriesMinInput").value = "1";
+        document.getElementById("caloriesMaxInput").value = "1000";
 
         var products = document.getElementsByClassName("product");
         for (var i = 0; i < products.length; i++) {
             products[i].style.display = "block";
         }
     }
-</script>
 </script>
 </body>
 </html>

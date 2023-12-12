@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Страница категорий</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         h1 {
             color: #dfbfe8;
@@ -126,6 +128,11 @@
             padding-left: 100px;
             padding-top: 35px;
         }
+        .sort-buttons button{
+            background-color: #dfbfe8;
+            width: 40%;
+            padding: 3%;
+        }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -135,7 +142,7 @@
         <table>
             <tr>
                 <td>
-                    <form id="categoriesForm" method="post" action="/categories">
+                    <form id="categoriesForm" method="post" action="/viewcategories">
                         <button type="submit" class="nav-link btn">Продукты</button>
                     </form>
                 </td>
@@ -176,8 +183,17 @@
                 <input type="text" id="searchCInput" placeholder="Поиск">
                 <br>
                 <button onclick="searchCategory()">Найти</button>
+                <div class="sort-buttons">
+                    <button onclick="sortAlphabetically()">
+                        <i class="fas fa-sort-alpha-down"></i>
+                    </button>
+                    <button onclick="sortReverseAlphabetically()">
+                        <i class="fas fa-sort-alpha-up"></i>
+                    </button>
+                </div>
             </div>
             <div class="categories-card">
+
                 <ul>
                     <li th:each="category : ${categories}" class="category-item">
                         <a th:href="@{/category/{categoryID}(categoryID=${category.categoryID})}"
@@ -233,6 +249,33 @@
             } else {
                 categoryItems[i].style.display = 'none';
             }
+        }
+    }
+
+    var categoryItems = document.getElementsByClassName('category-item');
+    function sortAlphabetically() {
+        var sortedItems = Array.from(categoryItems).sort(function (a, b) {
+            var categoryTextA = a.getElementsByTagName('a')[0].textContent.toLowerCase();
+            var categoryTextB = b.getElementsByTagName('a')[0].textContent.toLowerCase();
+            return categoryTextA.localeCompare(categoryTextB);
+        });
+
+        var categoriesCard = document.getElementsByClassName('categories-card')[0];
+        for (var i = 0; i < sortedItems.length; i++) {
+            categoriesCard.appendChild(sortedItems[i]);
+        }
+    }
+
+    function sortReverseAlphabetically() {
+        var sortedItems = Array.from(categoryItems).sort(function (a, b) {
+            var categoryTextA = a.getElementsByTagName('a')[0].textContent.toLowerCase();
+            var categoryTextB = b.getElementsByTagName('a')[0].textContent.toLowerCase();
+            return categoryTextB.localeCompare(categoryTextA);
+        });
+
+        var categoriesCard = document.getElementsByClassName('categories-card')[0];
+        for (var i = 0; i < sortedItems.length; i++) {
+            categoriesCard.appendChild(sortedItems[i]);
         }
     }
 </script>

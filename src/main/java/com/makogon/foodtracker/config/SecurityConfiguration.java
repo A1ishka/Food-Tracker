@@ -42,6 +42,7 @@ public class SecurityConfiguration {
                 .requestMatchers(new AntPathRequestMatcher("/vieweditprofile/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/viewregister/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/viewfavorite/**")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/viewcategories/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/myfavorite/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/addproduct/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/removeProductFromStatistics/**")).permitAll()
@@ -49,7 +50,7 @@ public class SecurityConfiguration {
                 .requestMatchers(new AntPathRequestMatcher("/questions")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/editprofile/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
-                .requestMatchers(new AntPathRequestMatcher("/user/**")).hasRole("USER")
+                .requestMatchers(new AntPathRequestMatcher("/map/**")).permitAll()
 
 
 

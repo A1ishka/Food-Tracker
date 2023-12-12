@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -21,7 +22,10 @@ public class CategoryController {
         this.productService = productService;
         this.categoryService = categoryService;
     }
-
+    @PostMapping("/viewcategories")
+    public String viewCategoriesPage() {
+        return "redirect:/categories";
+    }
     @GetMapping("/category/{categoryID}")
     public String showProductsByCategory(@PathVariable("categoryID") Long categoryID, Model model) {
         Category category = categoryService.getCategoryById(categoryID);
