@@ -231,7 +231,6 @@
                     <div class="product_img"><a th:href="@{/product/{productID}(productID=${product.productID})}"><img
                             th:src="${(product.image_url != null && product.image_url != '') ? product.image_url :'/resources/static/default_product.png' }"></a>
                     </div>
-                    <!--                    не видит дефолтную картинку-->
                 </td>
             </tr>
         </table>
