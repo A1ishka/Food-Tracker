@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-group input[type=text], [type=password] {
+            width: 100%;
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 5px;
+        }
+
+        .form-group button {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #440755;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3071a9;
+        }
+
+        .disable-form {
+            display: none;
+        }
+
+        .visible-form {
+
+        }
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .form-group {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<div class="form-group visible-form form-1">
+    <div class="row">
+        <div class="col">
+            <h2>Регистрация</h2>
+            <input type="text" name="login" id="login" class="form-control" placeholder="Логин" required th:required="true">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <input type="password" name="password" id="password" class="form-control" placeholder="Пароль" required th:required="true">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button onclick="next1()" class="btn btn-primary btn-block btn-next-1">Далее</button>
+            Уже есть аккаунт? <a href="/login">Войти</a>
+        </div>
+    </div>
+</div>
+
+<div class="form-group disable-form form-2">
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="firstname">Имя:</label>
+                <input type="text" id="firstName" name="firstName" required>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="lastname">Фамилия:</label>
+                <input type="text" id="lastName" name="lastName" required>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="age">Возраст:</label>
+                <input style="width:100px" type="number" id="age" name="age" size="20" min="10" max="150" required>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="form-group">
+                <label for="sex">Пол:</label>
+                <select id="sex" name="sex" required>
+                    <option value="male">Мужской</option>
+                    <option value="female">Женский</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button onclick="next2()" class="btn btn-primary btn-block">Далее</button>
+            <button onclick="prev2()" class="btn btn-primary btn-block">Назад</button>
+        </div>
+    </div>
+</div>
+
+
+<div class="form-group disable-form form-3">
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="weight">Вес (кг):</label>
+                <input type="number" id="weight" name="weight" min="30" max="500" required>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label for="height">Рост (см):</label>
+                <input type="number" id="height" name="height" min="100" max="300" required>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="activity-level">Уровень активности:</label>
+                <select id="activity-level" required>
+                    <option value="sedentary">Сидячий образ жизни</option>
+                    <option value="lightly-active">Низкая активность</option>
+                    <option value="moderately-active">Умеренная активность</option>
+                    <option value="very-active">Высокая активность</option>
+                    <option value="extra-active">Очень высокая активность</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <button onclick="next3()" class="btn btn-primary btn-block">Далее</button>
+            <button onclick="prev3()" class="btn btn-primary btn-block">Назад</button>
+        </div>
+    </div>
+
+</div>
+
+<div class="form-group disable-form form-4">
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <div>
+                    <label>
+                        <input type="radio" name="plan" value="weightGain" checked> План по набору веса
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <input type="radio" name="plan" value="weightLoss"> План для безопасного похудения
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <input type="radio" name="plan" value="weightMaintenance"> План для удержания веса
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <div>
+                    <label for="protein">Белки (г):</label>
+                    <input type="number" id="protein" step="0.01" value=0 readonly>
+                </div>
+                <div>
+                    <label for="fat">Жиры (г):</label>
+                    <input type="number" id="fat" step="0.01" value=0 readonly>
+                </div>
+                <div>
+                    <label for="carbs">Углеводы (г):</label>
+                    <input type="number" id="carbs" step="0.01" value=0 readonly>
+                </div>
+                <div>
+                    <label for="calories">Калораж (ккал):</label>
+                    <input type="number" id="calories" step="0.01" value=0 readonly>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div>
+                    <label>Белки (%):</label>
+                    <span id="proteinPercentage" value=""></span>
+                </div>
+                <div>
+                    <label>Жиры (%):</label>
+                    <span id="fatPercentage" value=""></span>
+                </div>
+                <div>
+                    <label>Углеводы (%):</label>
+                    <span id="carbsPercentage" value=""></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <button onclick="next4()" class="btn btn-primary btn-block">Зарегистрироваться</button>
+            <button onclick="prev4()" class="btn btn-primary btn-block">Назад</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function next1() {
+        document.querySelector(".form-1").classList.add("disable-form");
+        document.querySelector(".form-1").classList.remove("visible-form");
+        document.querySelector(".form-2").classList.add("visible-form");
+        document.querySelector(".form-2").classList.remove("disable-form");
+    }
+    function next2() {
+        document.querySelector(".form-2").classList.add("disable-form");
+        document.querySelector(".form-2").classList.remove("visible-form");
+        document.querySelector(".form-3").classList.add("visible-form");
+        document.querySelector(".form-3").classList.remove("disable-form");
+    }
+    function prev2() {
+        document.querySelector(".form-2").classList.add("disable-form");
+        document.querySelector(".form-2").classList.remove("visible-form");
+        document.querySelector(".form-1").classList.add("visible-form");
+        document.querySelector(".form-1").classList.remove("disable-form");
+    }
+    function next3() {
+        document.querySelector(".form-3").classList.add("disable-form");
+        document.querySelector(".form-3").classList.remove("visible-form");
+        document.querySelector(".form-4").classList.add("visible-form");
+        document.querySelector(".form-4").classList.remove("disable-form");
+
+        updateNutrition();
+    }
+    function prev3() {
+        document.querySelector(".form-3").classList.add("disable-form");
+        document.querySelector(".form-3").classList.remove("visible-form");
+        document.querySelector(".form-2").classList.add("visible-form");
+        document.querySelector(".form-2").classList.remove("disable-form");
+    }
+    function next4() {
+        // document.querySelector(".form-3").classList.remove("disable-form");
+        // document.querySelector(".form-3").classList.add("visible-form");
+        // document.querySelector(".form-2").classList.remove("disable-form");
+        // document.querySelector(".form-2").classList.add("visible-form");
+        // document.querySelector(".form-1").classList.remove("disable-form");
+        // document.querySelector(".form-1").classList.add("visible-form");
+        var login = document.getElementById('login').value;
+        var password = document.getElementById('password').value;
+        var firstName = document.getElementById('firstName').value;
+        var lastName = document.getElementById('lastName').value;
+        var age = document.getElementById('age').value;
+
+        var selectSex = document.getElementById("sex");
+        var selectedSexIndex = selectSex.selectedIndex;
+        var sex = selectSex.options[selectedSexIndex].value;
+
+        var weight = document.getElementById('weight').value;
+        var height = document.getElementById('height').value;
+
+        var selectActivity = document.getElementById("activity-level");
+        var selectedActivityIndex = selectActivity.selectedIndex;
+        var activity = selectActivity.options[selectedActivityIndex].value;
+
+        var options = document.getElementsByName('plan');
+        var selectedPlan;
+
+        for (var i = 0; i < options.length; i++) {
+            if (options[i].checked) {
+                selectedPlan = options[i].value;
+                break;
+            }
+        }
+
+        var protein = document.getElementById('protein').value;
+        var fat = document.getElementById('fat').value;
+        var carbs = document.getElementById('carbs').value;
+        var calories = document.getElementById('calories').value;
+
+        var form = document.createElement('form');
+
+        var url = '/register';
+        var formData = new FormData(form);
+        formData.append('login', login);
+        formData.append('password', password);
+        formData.append('firstName', firstName);
+        formData.append('lastName', lastName);
+        formData.append('age', age);
+        formData.append('sex', sex);
+        formData.append('weight', weight);
+        formData.append('height', height);
+        formData.append('activityLevel', activity);
+        formData.append('calories', calories);
+        formData.append('protein', protein);
+        formData.append('fats', fat);
+        formData.append('carbs', carbs);
+        formData.append('plan', selectedPlan);
+
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Произошла ошибка:', error);
+            });
+        document.body.appendChild(form);
+        form.submit();
+    }
+    function prev4() {
+        document.querySelector(".form-4").classList.add("disable-form");
+        document.querySelector(".form-4").classList.remove("visible-form");
+        document.querySelector(".form-3").classList.add("visible-form");
+        document.querySelector(".form-3").classList.remove("disable-form");
+    }
+    function updateNutrition() {
+        var weight = document.getElementById("weight").value;
+        var height = document.getElementById("height").value;
+        var activityLevel = document.getElementById("activity-level").value;
+        var age = document.getElementById("age").value;
+        var sex = document.getElementById("sex").value;
+        function calculateBasalMetabolicRate(weight, height, age, sex) {
+            var bmr = 0;
+            if (weight > 0 && height > 0) {
+                if (sex === "male") {
+                    bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+                } else if (sex === "female") {
+                    bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+                }
+            } else bmr = 0;
+            return bmr.toFixed(2);
+        }
+
+        function calculateTotalCalories(basalMetabolicRate, activityLevel) {
+            var totalCalories = 0;
+            if (activityLevel === "sedentary") {
+                totalCalories = basalMetabolicRate * 1.2;
+            } else if (activityLevel === "lightly-active") {
+                totalCalories = basalMetabolicRate * 1.375;
+            } else if (activityLevel === "moderately-active") {
+                totalCalories = basalMetabolicRate * 1.55;
+            } else if (activityLevel === "very-active") {
+                totalCalories = basalMetabolicRate * 1.725;
+            } else if (activityLevel === "extra-active") {
+                totalCalories = basalMetabolicRate * 1.9;
+            }
+            return totalCalories.toFixed(2);
+        }
+
+        var basalMetabolicRate = calculateBasalMetabolicRate(weight, height, age, sex);
+        var totalCalories = calculateTotalCalories(basalMetabolicRate, activityLevel);
+        var selectedPlan = $('input[name="plan"]:checked').val();
+        var calories = totalCalories;
+
+        var protein = 0;
+        var fat = 0;
+        var carbs = 0;
+
+        if (selectedPlan === 'weightGain') {
+            calories += 200;
+            protein = calories * 0.25/4;
+            fat = calories * 0.25/9;
+            carbs = calories * 0.50/4;
+        } else if (selectedPlan === 'weightLoss') {
+            calories -= 200;
+            protein = calories * 0.25/4;
+            fat = calories * 0.30/9;
+            carbs = calories * 0.45/4;
+        } else if (selectedPlan === 'weightMaintenance') {
+            protein = calories * 0.20/4;
+            fat = calories * 0.35/9;
+            carbs = calories * 0.45/4;
+        }
+
+        $('#protein').val(protein.toFixed(2));
+        $('#fat').val(fat.toFixed(2));
+        $('#carbs').val(carbs.toFixed(2));
+        $('#calories').val(calories);
+
+        var proteinPercentage = (protein / calories * 100 * 4).toFixed(2);
+        var fatPercentage = (fat / calories * 100 * 9).toFixed(2);
+        var carbsPercentage = (carbs / calories * 100 * 4).toFixed(2);
+
+        $('#proteinPercentage').text(proteinPercentage + '%');
+        $('#fatPercentage').text(fatPercentage + '%');
+        $('#carbsPercentage').text(carbsPercentage + '%');
+    }
+
+    $('input[name="plan"]').change(function () {
+        updateNutrition();
+    });
+</script>
+
+</body>
+</html>

@@ -1,10 +1,9 @@
 package com.makogon.foodtracker.config;
 
-import com.makogon.foodtracker.user.UserRepository;
+import com.makogon.foodtracker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -22,7 +21,7 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService(){
-        return username -> userRepository.findByLogin(username)
+        return login -> userRepository.findByLogin(login)
                 .orElseThrow(()->new UsernameNotFoundException("User not found"));
     }
 

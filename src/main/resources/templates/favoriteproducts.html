@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Любимые продукты пользователя</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <style>
+
+        .product-cards {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .product-card {
+            width: 180px;
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .product-card h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .product-card p {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .scrolling-text {
+            width: 170px;
+            height: 20px;
+            overflow: hidden;
+            border: 1px solid #ccc;
+        }
+
+        .scrolling-text p {
+            animation: scrollText 14s linear infinite;
+            white-space: nowrap;
+            margin: 0;
+            text-indent: 0%;
+        }
+
+        @keyframes scrollText {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .product_img {
+            width: 100px;
+            height: 100px;
+        }
+
+        .product_img img {
+            max-width: 100%;
+            max-height: 100%;
+            min-width: 50%;
+            min-height: 50%;
+        }
+
+        button {
+            width: 100%;
+            padding: 5%;
+            margin-top: 5%;
+        }
+
+        .btn btn-primary, .btn btn-primary btn-sm{
+            background-color: #dfbfe8;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Любимые продукты пользователя</h1>
+
+    <form id="addProductForm">
+        <div class="form-group">
+            <label for="productName">Название продукта:</label>
+            <input type="text" class="form-control" id="productName">
+        </div>
+        <button type="submit" class="btn btn-primary">Добавить</button>
+    </form>
+
+    <div class="product-cards">
+        <div th:each="favoriteProduct : ${favoriteProducts}" th:if="${favoriteProduct.person.personID == userID}"
+             class="product-card">
+            <h2 th:text="${favoriteProduct.product.productName}"></h2>
+            <table>
+                <tr>
+                    <td>
+                        <p>Калории:
+                        <p th:text="${favoriteProduct.product.calories}" id="calories"
+                           th:value="${favoriteProduct.product.calories}"></p></p>
+                    </td>
+                    <td>
+                        <div class="product_img"><a
+                                th:href="@{/product/{productID}(productID=${favoriteProduct.product.productID})}"><img
+                                th:src="${(favoriteProduct.product.image_url != null && favoriteProduct.product.image_url != '') ? favoriteProduct.product.image_url :'/resources/static/default_product.png' }"></a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="scrolling-text">
+                <p>Белки: <span th:text="${favoriteProduct.product.protein}">г</span> Жиры: <span
+                        th:text="${favoriteProduct.product.fats}">г</span>
+                    Углеводы: <span th:text="${favoriteProduct.product.carbs}">г</span> Белки: <span
+                            th:text="${favoriteProduct.product.protein}">г</span>
+                    Жиры: <span th:text="${favoriteProduct.product.fats}">г</span> Углеводы: <span
+                            th:text="${favoriteProduct.product.carbs}">г</span></p>
+            </div>
+            <button type="button" class="btn btn-danger btn-sm pull-right"
+                    th:onclick="'removeProduct(' + ${favoriteProduct.favoriteproductID} + ')'"
+            >Удалить
+            </button>
+            <button type="button" class="btn btn-primary btn-sm"
+                    th:onclick="'addToStatistics(' + ${favoriteProduct.favoriteproductID} + ')'">
+                    Добавить встатистику
+            </button>
+        </div>
+    </div>
+
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<script>
+    function removeProduct(favoriteProductID) {
+        $.ajax({
+            url: '/removeFromFavorites',
+            type: 'DELETE',
+            data: {favoriteProductID: favoriteProductID},
+            success: function () {
+                $('#productList li').each(function () {
+                    if ($(this).find('button').attr('onclick') === "removeProduct(" + favoriteProductID + ")") {
+                        $(this).remove();
+                    }
+                });
+                alert('Продукт успешно удален из избранного.');
+            },
+            error: function () {
+                alert('Не удалось удалить продукт из избранного.');
+            }
+        });
+    }
+
+    $('#addProductForm').submit(function (e) {
+        e.preventDefault();
+        var productName = $('#productName').val();
+        $.post('/addProductToFavorites', {productName: productName})
+            .done(function () {
+                // var listItem = $('<li class="list-group-item"></li>');
+                // listItem.text(productName);
+                //
+                // var deleteButton = $('<button type="button" class="btn btn-danger btn-sm pull-right">Удалить</button>');
+                // deleteButton.click(function () {
+                //     removeProduct(favoriteproductID);
+                // });
+
+                // listItem.append(deleteButton);
+                // $('#productList').append(listItem);
+                // $('#productName').val('');
+                alert('Продукт успешно добавлен');
+            })
+            .fail(function () {
+                alert('Не удалось добавить продукт.');
+            });
+    });
+
+    function addToStatistics(favoriteproductID) {
+        var weight = 200.0;
+        var data = {
+            weight: weight,
+            favoriteproductID: favoriteproductID
+        }
+        $.ajax({
+            url: "/myfavorite",
+            type: "POST",
+            data: data,
+            success: function (response) {
+                console.log(response);
+                location.reload();
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+</script>
+</body>
+</html>

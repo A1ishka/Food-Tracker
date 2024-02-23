@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Product</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        .container {
+            padding: 2%;
+            padding-left: 10%;
+            margin: 5%;
+            margin-left: 20%;
+            margin-right: 25%;
+
+            width: 45%;
+            background-color: #dfbfe8;
+        }
+
+        .container input {
+            padding: 0.5%;
+            margin: 0.5%;
+            width: 40%;
+            margin-left: 10%;
+        }
+
+        .container input[type="number"] {
+            width: 30%;
+        }
+
+        .container button{
+            width: 70%;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Добавить продукт к статистике</h1>
+    <button class="btn btn-primary" id="addProductButton" onclick="showAddProductForm()">Add Product</button>
+    <div id="addProductForm" style="display: none;">
+        <form action="/addproduct" method="post">
+            <div class="form-group">
+                <label for="productName">Название продукта</label>
+                <input type="text" class="form-control" id="productName" name="productName" list="productList"
+                       placeholder="Введите название продукта" value="" autocomplete="on">
+                <datalist id="productList">
+                </datalist>
+            </div>
+            <div class="form-group">
+                <label for="productWeight">Вес съеденного продукта</label>
+                <input type="number" step="0.2" min="0" max="1000" class="form-control" id="productWeight"
+                       name="productWeight" placeholder="Введите вес" value=200.0>
+            </div>
+            <input type="hidden" id="statisticsID" name="statisticsID" th:value="${statisticsID}">
+            <input type="hidden" id="userID" name="userID" value="">
+            <input type="hidden" id="weight" name="weight" value=200.0>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script th:inline="javascript">
+    var products = [[${products}]];
+    $(document).ready(function () {
+        var dataList = $("#productList");
+        products.forEach(function (product) {
+            var productName = product.productName;
+            var option = $("<option>").attr("value", productName);
+            dataList.append(option);
+        })
+    });
+</script>
+<script>
+    function showAddProductForm() {
+        var addProductForm = document.getElementById("addProductForm");
+        addProductForm.style.display = "block";
+        var addProductButton = document.getElementById("addProductButton");
+        addProductButton.style.display = "none";
+    }
+
+    var userID = document.cookie.replace(/(?:(?:^|.*;\s*)userID\s*=\s*([^;]*).*$)|^.*$/, "$1");
+    document.getElementById("userID").value = userID;
+    document.getElementById("weight").value = document.getElementById("productWeight").value;
+
+    $("#productForm").submit(function (event) {
+        event.preventDefault();
+
+        //var statisticsID = [[${statisticsID}]];
+        var productName = $("#productName").val();
+        var statisticsID = $("#statisticsID").val();
+        var userID = $("#userID").val();
+        var weight = $("#weight").val();
+        var data = {
+            productName: productName,
+            statisticsID: statisticsID,
+            userID: userID,
+            weight: weight
+        };
+
+        $.ajax({
+            url: $(this).attr("action"),
+            type: $(this).attr("method"),
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function (response) {
+                console.log("Product added successfully");
+                console.log(response);
+            },
+            error: function (xhr, status, error) {
+                console.error("Error adding product:", error);
+                console.error("Error status:", status);
+            }
+        });
+    });
+</script>
+</body>
+</html>

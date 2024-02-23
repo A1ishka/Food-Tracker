@@ -1,22 +1,14 @@
 package com.makogon.foodtracker.auth;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.makogon.foodtracker.config.JwtService;
-import com.makogon.foodtracker.user.User;
-import com.makogon.foodtracker.user.UserRepository;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.makogon.foodtracker.model.User;
+import com.makogon.foodtracker.register.RegisterRequest;
+import com.makogon.foodtracker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -29,13 +21,12 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
-                /*.firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .email(request.getEmail())*/
                 .login(request.getLogin())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .person(request.getPerson())
+                .role(request.getRole())
                 .build();
-        /*var savedUser =*/ repository.save(user);
+        repository.save(user);
         var jwtToken = jwtService.generateToken(user);
         //var refreshToken = jwtService.generateRefreshToken(user);
         //saveUserToken(savedUser, jwtToken);
@@ -50,6 +41,8 @@ public class AuthenticationService {
                 new UsernamePasswordAuthenticationToken(
                         request.getLogin(),
                         request.getPassword()
+//                        request.getPerson(),
+//                        request.getRole()
                 )
         );
         var user = repository.findByLogin(request.getLogin())
@@ -63,6 +56,15 @@ public class AuthenticationService {
                 //.refreshToken(refreshToken)
                 .build();
     }
+
+
+
+
+
+
+
+
+
 
     /*private void saveUserToken(User user, String jwtToken) {
         var token = Token.builder()

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Страница продуктов</title>
+    <style>
+        .product-cards {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .product-card {
+            width: 180px;
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .product-card h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .product-card p {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .scrolling-text {
+            width: 170px;
+            height: 20px;
+            overflow: hidden;
+            border: 1px solid #ccc;
+        }
+
+        .scrolling-text p {
+            animation: scrollText 14s linear infinite;
+            white-space: nowrap;
+            margin: 0;
+            text-indent: 0%;
+        }
+
+        @keyframes scrollText {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .product_img {
+            width: 100px;
+            height: 100px;
+        }
+
+        .product_img img {
+            max-width: 100%;
+            max-height: 100%;
+            min-width: 50%;
+            min-height: 50%;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .search {
+            margin-left: 41%;
+        }
+
+        input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 20%;
+            height: 100%;
+        }
+
+        button {
+            width: 10%;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #440755;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3071a9;
+        }
+
+        .filter input {
+            width: 7%;
+        }
+
+        .filter {
+            margin: 1%;
+            margin-left: 4%;
+        }
+
+        .sortButton, .filterButton {
+            width: 33%;
+        }
+
+        .header {
+            height: 100px;
+            background-color: #dfbfe8;
+        }
+
+        .header a {
+            font-size: x-large;
+        }
+
+        .header td {
+            padding-left: 100px;
+            padding-top: 35px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header">
+        <table>
+            <tr>
+
+                <td>
+                    <form id="categoriesForm" method="post" action="/viewcategories">
+                        <button type="submit" class="nav-link btn">Продукты</button>
+                    </form>
+                </td>
+                <td>
+                    <div class="">
+                        <form id="favoriteForm" method="post" action="/viewfavorite">
+                            <button type="submit" class="nav-link btn favoriets">Избранное</button>
+                        </form>
+                    </div>
+                </td>
+                <td>
+                    <div class="">
+                        <form id="editProfileForm" method="post" action="/vieweditprofile">
+                            <button type="submit" class="nav-link btn profile">Личный кабинет</button>
+                        </form>
+                    </div>
+                </td>
+                <td>
+                    <div class="">
+                        <form id="statisticsForm" method="post" action="/viewstatistics">
+                            <button type="submit" class="nav-link btn statistics">Статистика</button>
+                        </form>
+                    </div>
+                </td>
+                <td>
+                    <div class="">
+                        <form id="userForm" method="post" action="/viewuserpage">
+                            <button type="submit" class="nav-link btn users disable-button">Пользователи</button>
+                        </form>
+                    </div>
+                </td>
+                <td>
+                    <form id="loginForm" method="post" action="/viewregister">
+                        <button type="submit" class="nav-link btn">Регистрация</button>
+                    </form>
+                </td>
+                <td>
+                    <a th:href="@{/questions}">
+                        <button class="nav-link btn">Вопросы</button>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+<h1>Продукты категории <span th:text="${category.category}"></span>:</h1>
+<div class="search">
+
+    <input type="text" id="searchInput" placeholder="Поиск продукта по категории">
+    <button onclick="searchProduct()">Найти</button>
+    <br>
+    <button onclick="sortAlphabetically()" class="sortButton">Сортировать по алфавиту</button>
+    <br>
+    <button onclick="sortReverseAlphabetically()" class="sortButton">Сортировать в обратном порядке</button>
+    <br>
+    <br>
+    <div class="filter">
+        <label for="caloriesMinInput">Калории:</label>
+        <input type="number" id="caloriesMinInput" placeholder="Мин" min="0" max="1000" value="1">
+        <input type="number" id="caloriesMaxInput" placeholder="Макс" min="0" max="1000" value="1000">
+    </div>
+
+<!--    <div class="filter">-->
+<!--        <label for="proteinMinInput">Белки:</label>-->
+<!--        <input type="number" id="proteinMinInput" placeholder="Мин">-->
+
+<!--        <input type="number" id="proteinMaxInput" placeholder="Макс">-->
+<!--    </div>-->
+
+<!--    <div class="filter">-->
+<!--        <label for="fatMinInput">Жиры:</label>-->
+<!--        <input type="number" id="fatMinInput" placeholder="Мин">-->
+
+<!--        <input type="number" id="fatMaxInput" placeholder="Макс">-->
+<!--    </div>-->
+
+<!--    <div class="filter">-->
+<!--        <label for="carbsMinInput">Углеводы:</label>-->
+<!--        <input type="number" id="carbsMinInput" placeholder="Мин">-->
+
+<!--        <input type="number" id="carbsMaxInput" placeholder="Макс">-->
+<!--    </div>-->
+
+    <button onclick="filterProducts()" class="filterButton">Фильтровать</button>
+    <br>
+    <button onclick="resetFilter()" class="filterButton">Сбросить фильтр</button>
+</div>
+<div class="product-cards">
+    <div th:each="product : ${products}" th:if="${product.category.categoryID == category.categoryID}"
+         class="product-card">
+        <h2 th:text="${product.productName}"></h2>
+        <table>
+            <tr>
+                <td>
+                    <p>Калории:
+                    <p th:text="${product.calories}" id="calories" th:value="${product.calories}"></p></p>
+                </td>
+                <td>
+                    <div class="product_img"><a th:href="@{/product/{productID}(productID=${product.productID})}"><img
+                            th:src="${(product.image_url != null && product.image_url != '') ? product.image_url :'/resources/static/default_product.png' }"></a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <div class="scrolling-text">
+            <p>Белки: <span th:text="${product.protein}">г</span> Жиры: <span th:text="${product.fats}">г</span>
+                Углеводы: <span th:text="${product.carbs}">г</span> Белки: <span th:text="${product.protein}">г</span>
+                Жиры: <span th:text="${product.fats}">г</span> Углеводы: <span th:text="${product.carbs}">г</span></p>
+        </div>
+    </div>
+</div>
+<script>
+    function searchProduct() {
+        var input = document.getElementById("searchInput");
+        var filter = input.value.toLowerCase();
+        var productCards = document.getElementsByClassName("product-card");
+
+        for (var i = 0; i < productCards.length; i++) {
+            var productName = productCards[i].getElementsByTagName("h2")[0].textContent.toLowerCase();
+            if (productName.indexOf(filter) > -1) {
+                productCards[i].style.display = "";
+            } else {
+                productCards[i].style.display = "none";
+            }
+        }
+    }
+
+    var allProductCards = document.getElementsByClassName("product-cards");
+    var filteredProductCards = Array.from(allProductCards);
+
+    function sortAlphabetically() {
+        filteredProductCards.sort(function (a, b) {
+            var productNameA = a.getElementsByTagName("h2")[0].textContent.toLowerCase();
+            var productNameB = b.getElementsByTagName("h2")[0].textContent.toLowerCase();
+            return productNameA.localeCompare(productNameB);
+        });
+
+        updateProductCardOrder();
+    }
+    function sortReverseAlphabetically() {
+        filteredProductCards.sort(function (a, b) {
+            var productNameA = a.getElementsByTagName("h2")[0].textContent.toLowerCase();
+            var productNameB = b.getElementsByTagName("h2")[0].textContent.toLowerCase();
+            return productNameB.localeCompare(productNameA);
+        });
+
+        updateProductCardOrder();
+    }
+    function updateProductCardOrder() {
+        var productCardsContainer = document.querySelector(".product-cards");
+
+        filteredProductCards.forEach(function (card) {
+            productCardsContainer.appendChild(card);
+        });
+    }
+</script>
+<script th:inline="javascript">
+    function filterProducts() {
+        var caloriesMin = parseFloat(document.getElementById("caloriesMinInput").value);
+        var caloriesMax = parseFloat(document.getElementById("caloriesMaxInput").value);
+
+        var products = [[${products}]];
+
+        for (var i = 0; i < products.length; i++) {
+            var product = products[i];
+            var allProductCards = document.getElementsByClassName("product-card")[i];
+            console.log(allProductCards)
+            var calories = parseFloat(product.calories);
+            console.log(product.calories)
+
+            if (calories >= caloriesMin && calories <= caloriesMax) {
+                allProductCards.style.display = "block";
+            } else {
+                allProductCards.style.display = "none";
+            }
+        }
+    }
+
+    function resetFilter() {
+        document.getElementById("caloriesMinInput").value = "1";
+        document.getElementById("caloriesMaxInput").value = "1000";
+
+        var products = document.getElementsByClassName("product");
+        for (var i = 0; i < products.length; i++) {
+            products[i].style.display = "block";
+        }
+    }
+</script>
+</body>
+</html>

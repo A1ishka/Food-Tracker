@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Statistics Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: linear-gradient(to bottom, hsl(273, 75%, 66%), hsl(240, 73%, 65%));
+        }
+        button {
+            width: 30%;
+            padding: 10px;
+            background-color: #440755;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #3071a9;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Statistics</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Calories</th>
+            <th>Protein</th>
+            <th>Fats</th>
+            <th>Carbs</th>
+            <th>Переход</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="stat : ${statisticsPage.content}" th:if="${userID == stat.person.personID}">
+            <td th:text="${stat.date}"></td>
+            <td th:text="${stat.calories}"></td>
+            <td th:text="${stat.protein}"></td>
+            <td th:text="${stat.fats}"></td>
+            <td th:text="${stat.carbs}"></td>
+            <td>
+                <form id="openForm" method="post" th:action="'viewstatistics/' + ${stat.statisticsID}">
+                    <button type="submit">Открыть</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div>
+        <a th:href="@{/statistics?page=${currentPage - 1}}">&lt; Prev</a>
+        <span th:text="${currentPage}"></span>
+        <a th:href="@{/statistics?page=${currentPage + 1}}">Next &gt;</a>
+    </div>
+</div>
+</body>
+</html>

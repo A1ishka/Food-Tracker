@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .header {
+            height: 100px;
+            background-color: #dfbfe8;
+        }
+
+        .header a {
+            font-size: x-large;
+        }
+
+        .header td {
+            padding-left: 100px;
+            padding-top: 35px;
+        }
+
+        button {
+            width: 10%;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #440755;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #map {
+            height: 30em;
+        }
+
+        h2 {
+            font-size: 33px;
+            align-content: center;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header">
+        <table>
+            <tr>
+                <td>
+                    <form id="categoriesForm" method="post" action="/viewcategories">
+                        <button type="submit" class="nav-link btn">Продукты</button>
+                    </form>
+                </td>
+                <td>
+                    <form id="favoriteForm" method="post" action="/viewfavorite">
+                        <button type="submit" class="nav-link btn">Избранное</button>
+                    </form>
+                </td>
+                <td>
+                    <form id="editProfileForm" method="post" action="/vieweditprofile">
+                        <button type="submit" class="nav-link btn">Личный кабинет</button>
+                    </form>
+                </td>
+                <td>
+                    <form id="statisticsForm" method="post" action="/viewstatistics">
+                        <button type="submit" class="nav-link btn">Статистика</button>
+                    </form>
+                </td>
+                <td>
+                    <form id="loginForm" method="post" action="/viewregister">
+                        <button type="submit" class="nav-link btn">Регистрация</button>
+                    </form>
+                </td>
+                <td>
+                    <a th:href="@{/questions}">
+                        <button class="nav-link btn">Вопросы</button>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+<h2>Подробнее о команде разработки веб-приложения</h2>
+<div class="map-div">
+    <div id="map"></div>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=7ddbcd1a-5a9c-47cd-a6a2-28c27db7adfd&lang=ru_RU"
+            type="text/javascript"></script>
+    <script>
+        ymaps.ready(init);
+
+        function init() {
+            var myMap = new ymaps.Map("map", {
+                center: [53.911583, 27.595727],
+                zoom: 13
+            });
+
+            var myPlacemark1 = new ymaps.Placemark([53.918873, 27.593756], {
+                    hintContent: 'Молодежный пункт',
+                    balloonContent: 'Можно встретить особенно здоровое питание и фигуру'
+                });
+
+            var myPlacemark2 = new ymaps.Placemark([53.912091, 27.594754], {
+                hintContent: 'Центр печати',
+                balloonContent: 'Здесь робокопи лучше, чем в пятом корпусе'
+                },
+                {
+                    preset: "islands#circleDotIcon",
+                    iconColor: '#440755'
+            });
+
+            var myPlacemark3 = new ymaps.Placemark([53.911583, 27.595727], {
+                hintContent: 'Административный центр',
+                balloonContent: 'Дела делаются здесь'
+                },
+                {
+                    preset: "islands#circleDotIcon",
+                    iconColor: '#440755'
+            });
+
+            var myPlacemark4 = new ymaps.Placemark([53.903053, 27.598355], {
+                hintContent: 'Инновационный центр',
+                balloonContent: 'Разработка новых идей'
+            });
+
+            var myPlacemark5 = new ymaps.Placemark([53.930035, 27.588841], {
+                hintContent: 'Общежитие для работников',
+                balloonContent: 'Они здесь кушают и спят'
+                },
+                {
+                    preset: "islands#circleDotIcon",
+                    iconColor: '#440755'
+            });
+
+            myMap.geoObjects.add(myPlacemark1);
+            myMap.geoObjects.add(myPlacemark2);
+            myMap.geoObjects.add(myPlacemark3);
+            myMap.geoObjects.add(myPlacemark4);
+            myMap.geoObjects.add(myPlacemark5);
+        }
+    </script>
+</div>
+</body>
+</html>
